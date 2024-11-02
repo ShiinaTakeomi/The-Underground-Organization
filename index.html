@@ -9,39 +9,43 @@
             font-family: Arial, sans-serif; 
             margin: 0; 
             padding: 0; 
-            background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg'); /* Background image */
-            background-size: cover; /* Cover the entire background */
-            background-position: center; /* Center the image */
-            color: white; /* Change text color to white for better contrast */
+            background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            color: white; 
         }
         .container { 
             max-width: 800px; 
             margin: auto; 
             position: relative; 
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
+            background-color: rgba(0, 0, 0, 0.5); 
             padding: 20px;
-            border-radius: 10px; /* Rounded corners */
+            border-radius: 10px; 
         }
         input, textarea, button { 
             display: block; 
             margin-bottom: 10px; 
             width: 100%; 
             padding: 8px; 
-            border-radius: 5px; /* Rounded corners for inputs */
+            border-radius: 5px; 
         }
         .chat-box { 
             border: 1px solid #ccc; 
             height: 200px; 
             overflow-y: scroll; 
             padding: 10px; 
-            background-color: rgba(255, 255, 255, 0.9); /* Light background for chat */
+            background-color: rgba(255, 255, 255, 0.9); 
         }
         .message { 
             margin-bottom: 5px; 
-            color: black !important; /* Ensure messages are black */
+            color: black; 
         }
         .username { 
             font-weight: bold; 
+        }
+        .timestamp {
+            font-size: 0.8em; 
+            color: gray; 
         }
         .clear-chat-button { 
             position: absolute; 
@@ -110,8 +114,8 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp')), (snapshot) => {
+        // Listen for new messages and order by timestamp (newest first)
+        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'desc')), (snapshot) => {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
 
@@ -119,8 +123,8 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
-                messageDiv.style.color = 'black'; // Set message color to black inline
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}`;
+                const timestamp = new Date(messageData.timestamp).toLocaleString(); // Format timestamp
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message} <span class="timestamp">${timestamp}</span>`;
                 chatBox.appendChild(messageDiv);
             });
 
