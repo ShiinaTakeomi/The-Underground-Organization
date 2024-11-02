@@ -47,7 +47,7 @@
             font-size: 0.8em; 
             color: gray; 
             margin-left: 10px; 
-            display: inline; /* Keep timestamp on the same line */
+            display: block; 
         }
         .clear-chat-button { 
             position: absolute; 
@@ -126,11 +126,11 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Get Malaysia time
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<span class="timestamp"> ${malaysiaTime}</span>`; // Keep the timestamp on the same line
-                chatBox.appendChild(messageDiv);
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`; // Keep the timestamp on a new line
+                chatBox.appendChild(messageDiv); // Append the message to the chat box
             });
 
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom to show latest message
         });
 
         // Add event listener for the Enter key to send messages
