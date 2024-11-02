@@ -46,6 +46,7 @@
         .timestamp {
             font-size: 0.8em; 
             color: gray; 
+            line-height: 0.8; /* Adjust line height for smaller spacing */
         }
         .clear-chat-button { 
             position: absolute; 
@@ -91,7 +92,7 @@
         // Function to get current Malaysia time
         function getMalaysiaTime() {
             const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            return new Date().toLocaleTimeString('en-US', options);
+            return new Date().toLocaleString('en-US', options);
         }
 
         // Chat functions
@@ -130,7 +131,7 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 const malaysiaTime = getMalaysiaTime(); // Get current Malaysia time
-                messageDiv.innerHTML = `<span class="timestamp">${malaysiaTime} </span><span class="username">${messageData.username}: </span>${messageData.message}`;
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`;
                 chatBox.appendChild(messageDiv);
             });
 
