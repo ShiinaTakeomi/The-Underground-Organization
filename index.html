@@ -47,6 +47,7 @@
             font-size: 0.8em; 
             color: gray; 
             margin-left: 10px; /* Add space between message and timestamp */
+            display: block; /* Make the timestamp display as a block element */
         }
         .clear-chat-button { 
             position: absolute; 
@@ -131,7 +132,7 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-US', { timeZone: 'Asia/Kuala_Lumpur' });
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<span class="timestamp"> ${malaysiaTime}</span>`;
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`;
                 chatBox.appendChild(messageDiv);
             });
 
