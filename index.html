@@ -47,7 +47,7 @@
             font-size: 0.8em; 
             color: gray; 
             margin-left: 10px; 
-            display: block; 
+            display: inline; /* Keep timestamp on the same line */
         }
         .clear-chat-button { 
             position: absolute; 
@@ -116,8 +116,8 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp (newest first)
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'desc')), (snapshot) => { // Change to 'desc'
+        // Listen for new messages and order by timestamp (oldest first)
+        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'asc')), (snapshot) => { // Change to 'asc'
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
 
@@ -126,7 +126,7 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Get Malaysia time
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`; // Keep the timestamp on a new line
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<span class="timestamp"> ${malaysiaTime}</span>`; // Keep the timestamp on the same line
                 chatBox.appendChild(messageDiv);
             });
 
