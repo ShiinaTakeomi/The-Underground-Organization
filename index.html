@@ -35,6 +35,8 @@
             overflow-y: scroll; 
             padding: 10px; 
             background-color: rgba(255, 255, 255, 0.9); 
+            display: flex;
+            flex-direction: column; /* Keep default direction */
         }
         .message { 
             margin-bottom: 5px; 
@@ -71,7 +73,6 @@
         } 
     </style>
     <script type="module">
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
             authDomain: "index-d3482.firebaseapp.com",
@@ -82,15 +83,12 @@
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        // Import Firebase and Firestore
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js';
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js';
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Get Firestore instance
 
-        // Chat functions
         async function sendMessage() {
             const usernameInput = document.getElementById('usernameInput');
             const messageInput = document.getElementById('chatInput');
@@ -108,7 +106,6 @@
             }
         }
 
-        // Clear chat log function
         async function clearChat() {
             const chatCollection = collection(db, 'chat');
             const snapshot = await getDocs(chatCollection);
@@ -116,7 +113,7 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp (oldest first)
+        // Listen for new messages and order by timestamp (ascending)
         onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'asc')), (snapshot) => {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
@@ -125,7 +122,10 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
-                const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Get Malaysia time
+                
+                // Convert UTC timestamp to Malaysia time
+                const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+                
                 messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`; // Keep the timestamp on a new line
                 chatBox.appendChild(messageDiv);
             });
@@ -133,7 +133,6 @@
             chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
         });
 
-        // Add event listener for the Enter key to send messages
         document.addEventListener('DOMContentLoaded', () => {
             const messageInput = document.getElementById('chatInput');
             messageInput.addEventListener('keydown', (event) => {
@@ -144,7 +143,6 @@
             });
         });
 
-        // Expose functions to the global scope
         window.sendMessage = sendMessage;
         window.clearChat = clearChat;
     </script>
