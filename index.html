@@ -35,8 +35,6 @@
             overflow-y: scroll; 
             padding: 10px; 
             background-color: rgba(255, 255, 255, 0.9); 
-            display: flex;
-            flex-direction: column; /* Normal column direction */
         }
         .message { 
             margin-bottom: 5px; 
@@ -118,8 +116,8 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp (newest first)
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'desc')), (snapshot) => { // Change to 'desc'
+        // Listen for new messages and order by timestamp (oldest first)
+        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'asc')), (snapshot) => {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
 
@@ -132,7 +130,7 @@
                 chatBox.appendChild(messageDiv);
             });
 
-            chatBox.scrollTop = 0; // Scroll to top to show the most recent message
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
         });
 
         // Add event listener for the Enter key to send messages
