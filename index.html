@@ -38,7 +38,7 @@
         }
         .message { 
             margin-bottom: 5px; 
-            color: black !important; /* Change font color to black */
+            color: black !important; /* Ensure messages are black */
         }
         .username { 
             font-weight: bold; 
@@ -119,6 +119,7 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
+                messageDiv.style.color = 'black'; // Set message color to black inline
                 messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}`;
                 chatBox.appendChild(messageDiv);
             });
