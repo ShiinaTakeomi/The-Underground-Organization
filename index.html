@@ -88,22 +88,22 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Get Firestore instance
 
+        // Get current time in Malaysia
+        function getMalaysiaTime() {
+            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            return new Intl.DateTimeFormat('en-US', options).format(new Date());
+        }
+
         // Chat functions
         async function sendMessage() {
             const usernameInput = document.getElementById('usernameInput');
             const messageInput = document.getElementById('chatInput');
             if (usernameInput.value !== '' && messageInput.value !== '') {
                 try {
-                    // Get the current time in Malaysia (UTC+8)
-                    const now = new Date();
-                    const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', hour12: false };
-                    const timeString = now.toLocaleTimeString('en-US', options);
-
                     await addDoc(collection(db, 'chat'), {
                         username: usernameInput.value,
                         message: messageInput.value,
-                        timestamp: Date.now(), // Store timestamp in milliseconds
-                        time: timeString // Store current time in Malaysia
+                        timestamp: Date.now() // Store timestamp in milliseconds
                     });
                     messageInput.value = ''; // Clear message input after sending
                 } catch (error) {
@@ -130,7 +130,8 @@
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
                 const timestamp = new Date(messageData.timestamp).toLocaleString(); // Format timestamp
-                messageDiv.innerHTML = `<span class="timestamp">${messageData.time} </span><span class="username">${messageData.username}: </span>${messageData.message}`;
+                const malaysiaTime = getMalaysiaTime(); // Get current Malaysia time
+                messageDiv.innerHTML = `<span class="timestamp">${malaysiaTime} </span><span class="username">${messageData.username}: </span>${messageData.message} <span class="timestamp">${timestamp}</span>`;
                 chatBox.appendChild(messageDiv);
             });
 
