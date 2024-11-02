@@ -46,8 +46,8 @@
         .timestamp {
             font-size: 0.8em; 
             color: gray; 
-            margin-left: 10px; /* Add space between message and timestamp */
-            display: block; /* Make the timestamp display as a block element */
+            margin-left: 10px; 
+            display: block; 
         }
         .clear-chat-button { 
             position: absolute; 
@@ -90,12 +90,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Get Firestore instance
 
-        // Function to get current Malaysia time
-        function getMalaysiaTime() {
-            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            return new Date().toLocaleString('en-US', options);
-        }
-
         // Chat functions
         async function sendMessage() {
             const usernameInput = document.getElementById('usernameInput');
@@ -122,8 +116,8 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp (newest first)
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'desc')), (snapshot) => {
+        // Listen for new messages and order by timestamp (oldest first)
+        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'asc')), (snapshot) => { // Change to 'asc'
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
 
@@ -131,8 +125,8 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
-                const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-US', { timeZone: 'Asia/Kuala_Lumpur' });
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`;
+                const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Get Malaysia time
+                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`; // Keep the timestamp on a new line
                 chatBox.appendChild(messageDiv);
             });
 
