@@ -130,7 +130,7 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
-                const malaysiaTime = getMalaysiaTime(); // Get current Malaysia time
+                const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-US', { timeZone: 'Asia/Kuala_Lumpur' });
                 messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`;
                 chatBox.appendChild(messageDiv);
             });
