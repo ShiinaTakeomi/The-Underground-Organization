@@ -88,10 +88,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Get Firestore instance
 
-        // Get current time in Malaysia
+        // Function to get current Malaysia time
         function getMalaysiaTime() {
-            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-            return new Intl.DateTimeFormat('en-US', options).format(new Date());
+            const options = { timeZone: 'Asia/Kuala_Lumpur', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            return new Date().toLocaleTimeString('en-US', options);
         }
 
         // Chat functions
@@ -129,9 +129,8 @@
                 const messageData = doc.data();
                 const messageDiv = document.createElement('div');
                 messageDiv.className = 'message';
-                const timestamp = new Date(messageData.timestamp).toLocaleString(); // Format timestamp
                 const malaysiaTime = getMalaysiaTime(); // Get current Malaysia time
-                messageDiv.innerHTML = `<span class="timestamp">${malaysiaTime} </span><span class="username">${messageData.username}: </span>${messageData.message} <span class="timestamp">${timestamp}</span>`;
+                messageDiv.innerHTML = `<span class="timestamp">${malaysiaTime} </span><span class="username">${messageData.username}: </span>${messageData.message}`;
                 chatBox.appendChild(messageDiv);
             });
 
