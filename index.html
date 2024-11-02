@@ -116,8 +116,8 @@
             await Promise.all(deletePromises);
         }
 
-        // Listen for new messages and order by timestamp (oldest first)
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'asc')), (snapshot) => { // Change to 'asc'
+        // Listen for new messages and order by timestamp (newest first)
+        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp', 'desc')), (snapshot) => { // Change to 'desc'
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
 
