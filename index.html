@@ -36,7 +36,7 @@
             padding: 10px; 
             background-color: rgba(255, 255, 255, 0.9); 
             display: flex;
-            flex-direction: column; /* Changed to column for normal order */
+            flex-direction: column; /* Normal column direction */
         }
         .message { 
             margin-bottom: 5px; 
@@ -129,10 +129,10 @@
                 messageDiv.className = 'message';
                 const malaysiaTime = new Date(messageData.timestamp).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Get Malaysia time
                 messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}<br><span class="timestamp">${malaysiaTime}</span>`; // Keep the timestamp on a new line
-                chatBox.appendChild(messageDiv); // Append to the end of the chat box
+                chatBox.appendChild(messageDiv);
             });
 
-            chatBox.scrollTop = 0; // Scroll to top
+            chatBox.scrollTop = 0; // Scroll to top to show the most recent message
         });
 
         // Add event listener for the Enter key to send messages
