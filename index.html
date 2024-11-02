@@ -22,7 +22,7 @@
             padding: 20px;
             border-radius: 10px; 
         }
-        input, textarea, button { 
+        input, button { 
             display: block; 
             margin-bottom: 10px; 
             width: 100%; 
@@ -97,7 +97,7 @@
                     await addDoc(collection(db, 'chat'), {
                         username: usernameInput.value,
                         message: messageInput.value,
-                        timestamp: Date.now()
+                        timestamp: Date.now() // Store timestamp in milliseconds
                     });
                     messageInput.value = ''; // Clear message input after sending
                 } catch (error) {
