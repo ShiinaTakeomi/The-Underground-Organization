@@ -16,7 +16,6 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            position: relative; /* Enable positioning for child elements */
         }
         h1 {
             text-align: center;
@@ -38,22 +37,9 @@
             padding: 10px;
             margin-right: 10px;
         }
-        #sendMessage {
+        #sendMessage, #clearChat, #biodataButton {
             padding: 10px 15px;
             margin-top: 10px;
-        }
-        #clearChat {
-            position: absolute; /* Position at top right */
-            top: 20px;
-            right: 20px;
-            padding: 10px 15px;
-        }
-        #biodataButton {
-            position: absolute; /* Position at right middle */
-            right: 20px;
-            top: 50%; /* Center vertically */
-            transform: translateY(-50%); /* Adjust for button height */
-            padding: 10px 15px;
         }
     </style>
 </head>
