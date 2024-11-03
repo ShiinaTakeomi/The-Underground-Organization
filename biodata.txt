@@ -26,6 +26,7 @@
         }
         button {
             padding: 10px 15px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -40,6 +41,7 @@
     <input type="text" id="class" placeholder="Character Class" required>
     <button type="submit">Submit</button>
 </form>
+<button id="returnButton">Return to Chat</button>
 
 <script>
     document.getElementById('biodataForm').addEventListener('submit', function(event) {
@@ -50,8 +52,17 @@
         const race = document.getElementById('race').value;
         const charClass = document.getElementById('class').value;
 
+        // Save character details to localStorage
+        const character = { name, age, gender, race, charClass };
+        localStorage.setItem('character', JSON.stringify(character));
+
         alert(`Character Created!\nName: ${name}\nAge: ${age}\nGender: ${gender}\nRace: ${race}\nClass: ${charClass}`);
-        // You can add code here to save the character details or redirect back to the main page.
+        // Redirect back to the main page
+        window.location.href = 'index.html';
+    });
+
+    document.getElementById('returnButton').addEventListener('click', () => {
+        window.location.href = 'index.html'; // Redirect back to the chat page
     });
 </script>
 
