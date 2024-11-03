@@ -87,7 +87,7 @@
 
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(app); // Correct initialization for Firestore
+    const db = firebase.firestore(app); // Initialize Firestore
 
     // Variables
     let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
@@ -99,22 +99,21 @@
     }
 
     // Function to render messages from Firestore
-    function renderMessages() {
+    async function renderMessages() {
         const chatBox = document.getElementById('chatBox');
         chatBox.innerHTML = ''; // Clear chat box
-        db.collection("messages").orderBy("timestamp").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                const message = doc.data();
-                const messageElement = document.createElement('div');
-                messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
-                chatBox.appendChild(messageElement);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
+        const querySnapshot = await db.collection("messages").orderBy("timestamp").get();
+        querySnapshot.forEach((doc) => {
+            const message = doc.data();
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+            chatBox.appendChild(messageElement);
         });
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
     }
 
     // Function to send a message
-    function sendMessage() {
+    async function sendMessage() {
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
@@ -123,10 +122,9 @@
                 timestamp: Math.floor(Date.now() / 1000)
             };
             // Add message to Firestore
-            db.collection("messages").add(newMessage).then(() => {
-                messageInput.value = ''; // Clear input field
-                renderMessages(); // Refresh message display
-            });
+            await db.collection("messages").add(newMessage);
+            messageInput.value = ''; // Clear input field
+            renderMessages(); // Refresh message display
         } else {
             alert("Please enter a message."); // Alert for empty message
         }
