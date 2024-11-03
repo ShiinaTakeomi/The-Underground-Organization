@@ -41,18 +41,6 @@
             padding: 10px 15px;
             margin-top: 10px;
         }
-        #characterSheet {
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            border-radius: 5px;
-            width: 400px;
-        }
-        #characterSheet input {
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 5px;
-        }
     </style>
 </head>
 <body>
@@ -67,7 +55,8 @@
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    
+    let character = JSON.parse(localStorage.getItem('character')) || {};
+
     function formatTimestamp(utcTimestamp) {
         const date = new Date(utcTimestamp * 1000);
         return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
@@ -89,7 +78,7 @@
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
-                sender: 'You',
+                sender: character.name || 'You',
                 content: messageInput.value,
                 timestamp: Math.floor(Date.now() / 1000)
             };
