@@ -75,7 +75,10 @@
         const db = getFirestore(app); // Initialize Firestore
 
         // Variables
-        let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
+        let character = JSON.parse(localStorage.getItem('character')) || { aliasName: 'You' }; // Default character name
+
+        // Update character name to use aliasName from biodata
+        const characterName = character.aliasName || 'Anonymous'; // Use aliasName or default to 'Anonymous'
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
@@ -108,7 +111,7 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: character.name && character.name !== 'You' ? character.name : 'Anonymous', // Ensure sender has a default value
+                    sender: characterName, // Use the character name
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
@@ -127,47 +130,27 @@
         // Function to clear chat
         async function clearChat() {
             const messagesRef = collection(db, "messages");
-            const querySnapshot = await getDocs(messagesRef);
-            const deletePromises = [];
-            querySnapshot.forEach((doc) => {
-                deletePromises.push(deleteDoc(doc.ref));
+            const messagesSnapshot = await getDocs(messagesRef);
+            messagesSnapshot.forEach(async (doc) => {
+                await deleteDoc(doc.ref);
             });
-            await Promise.all(deletePromises); // Wait for all deletions to complete
         }
 
-        document.getElementById('sendMessage').addEventListener('click', sendMessage);
-
-        // Allow sending message with Enter key
-        document.getElementById('chatForm').addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission
-                sendMessage(); // Call the sendMessage function
-            }
-        });
-
-        document.getElementById('clearChat').addEventListener('click', clearChat); // Updated to clear chat
-
-        document.getElementById('biodataButton').addEventListener('click', () => {
-            window.location.href = 'biodata.html'; // Redirect to the biodata page
-        });
-
-        // Call to render messages initially
-        renderMessages();
+        // Load messages and render them
+        window.onload = function() {
+            renderMessages(); // Call to render messages
+        };
     </script>
-
 </head>
 <body>
 
 <h1>The Underground Organization</h1>
-
 <div id="chatBox"></div>
-<form id="chatForm">
-    <input type="text" id="messageInput" placeholder="Type your message..." required>
-</form>
+<input type="text" id="messageInput" placeholder="Type your message here...">
 <div class="button-container">
-    <button type="button" id="sendMessage">Send</button>
-    <button type="button" id="clearChat">Clear Chat</button>
-    <button id="biodataButton">Biodata</button>
+    <button id="sendMessage" onclick="sendMessage()">Send Message</button>
+    <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+    <button id="biodataButton" onclick="window.location.href='biodata.html'">Create Character</button>
 </div>
 
 </body>
