@@ -44,15 +44,22 @@
             background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
             color: black; /* Change text color for better contrast */
         }
-        #sendMessage, #clearChat, #biodataButton {
+        #sendMessage, #clearChat, #biodataButton, .locationButton {
             padding: 10px 15px;
             margin-top: 10px;
+            cursor: pointer;
         }
         .button-container {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+        }
+        .location-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
     </style>
     <!-- Firebase SDKs -->
@@ -91,7 +98,7 @@
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "warehouseMessages"); // Use a separate collection for this room
+            const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
             // Use onSnapshot for real-time updates
@@ -118,7 +125,7 @@
                 };
                 // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "warehouseMessages"), newMessage); // Add to the warehouseMessages collection
+                    await addDoc(collection(db, "messages"), newMessage);
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
@@ -130,7 +137,7 @@
 
         // Function to clear chat
         window.clearChat = async function() { // Add window. to make it global
-            const messagesRef = collection(db, "warehouseMessages");
+            const messagesRef = collection(db, "messages");
             const messagesSnapshot = await getDocs(messagesRef);
             messagesSnapshot.forEach(async (doc) => {
                 await deleteDoc(doc.ref);
@@ -161,7 +168,12 @@
     <button id="sendMessage" onclick="sendMessage()">Send</button>
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
     <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-    <button onclick="window.location.href='index.html'">Back to Main</button> <!-- Added a back button -->
+</div>
+
+<div class="location-container">
+    <button class="locationButton" onclick="window.location.href='index.html'">Back to Home</button>
+    <button class="locationButton" onclick="window.location.href='downtown.html'">Downtown District</button>
+    <button class="locationButton" onclick="window.location.href='commercial.html'">Commercial District</button>
 </div>
 
 </body>
