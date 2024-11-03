@@ -52,6 +52,14 @@
             padding: 10px 15px;
             margin-top: 10px;
             cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, .locationButton:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .button-container {
             display: flex;
@@ -145,6 +153,14 @@
             }
         };
 
+        // Function to navigate to another page with loading message
+        function navigateTo(url) {
+            document.body.innerHTML = "<h2>Loading...</h2>"; // Show loading message
+            setTimeout(() => {
+                window.location.href = url; // Navigate after a short delay
+            }, 500); // Adjust delay as needed
+        }
+
         // Load messages and render them
         window.onload = function() {
             renderMessages(); // Call to render messages
@@ -168,8 +184,8 @@
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()">Send</button>
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-    <button onclick="window.location.href='index.html'">Back to Main</button> <!-- Button to return to the main page -->
+    <button id="biodataButton" onclick="navigateTo('biodata.html')">Biodata</button>
+    <button onclick="navigateTo('index.html')">Back to Main</button> <!-- Button to return to the main page -->
 </div>
 
 </body>
