@@ -5,15 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Application</title>
     <style>
+        body {
+            background-image: url('path-to-your-background-image.jpg'); /* Add the URL of your image */
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+        }
         #chatBox {
             border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
             height: 300px;
             overflow-y: scroll;
             padding: 10px;
             margin-bottom: 10px;
+            border-radius: 5px;
         }
         #messageInput {
-            width: 80%;
+            width: 75%;
+            padding: 10px;
+            margin-right: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        #sendMessage {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #sendMessage:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
@@ -35,8 +59,8 @@
 
     // Function to format the UTC timestamp to local time
     function formatTimestamp(utcTimestamp) {
-        const date = new Date(utcTimestamp * 1000); // Convert seconds to milliseconds
-        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Format for Malaysian time
+        const date = new Date(utcTimestamp * 1000); // Convert to milliseconds
+        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Format to Malaysian time
     }
 
     // Function to render chat messages
@@ -49,7 +73,8 @@
 
         messages.forEach(message => {
             const messageElement = document.createElement('div');
-            messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+            messageElement.style.marginBottom = '10px';
+            messageElement.innerHTML = `<strong>${message.sender}:</strong> ${message.content}<br><small>${formatTimestamp(message.timestamp)}</small>`;
             chatBox.appendChild(messageElement);
         });
 
