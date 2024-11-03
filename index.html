@@ -48,8 +48,10 @@
 <h1>The Underground Organization</h1>
 
 <div id="chatBox"></div>
-<input type="text" id="messageInput" placeholder="Type your message...">
-<button id="sendMessage">Send</button>
+<form id="chatForm">
+    <input type="text" id="messageInput" placeholder="Type your message..." required>
+    <button type="button" id="sendMessage">Send</button>
+</form>
 <button id="clearChat">Clear Chat</button>
 <button id="biodataButton">Biodata</button>
 
@@ -94,10 +96,9 @@
     document.getElementById('sendMessage').addEventListener('click', sendMessage);
 
     // Allow sending message with Enter key
-    document.getElementById('messageInput').addEventListener('keypress', (event) => {
+    document.getElementById('chatForm').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            console.log("Enter key pressed"); // Debugging log
-            event.preventDefault(); // Prevent default action
+            event.preventDefault(); // Prevent form submission
             sendMessage(); // Call the sendMessage function
         }
     });
