@@ -35,11 +35,15 @@
         #messageInput {
             width: 80%;
             padding: 10px;
-            margin-right: 10px;
+            margin-bottom: 10px; /* Add some space below the input */
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px; /* Space between buttons */
         }
         #sendMessage, #clearChat, #biodataButton {
             padding: 10px 15px;
-            margin-top: 10px;
         }
     </style>
 </head>
@@ -50,10 +54,12 @@
 <div id="chatBox"></div>
 <form id="chatForm">
     <input type="text" id="messageInput" placeholder="Type your message..." required>
-    <button type="button" id="sendMessage">Send</button>
 </form>
-<button id="clearChat">Clear Chat</button>
-<button id="biodataButton">Biodata</button>
+<div class="button-container">
+    <button type="button" id="sendMessage">Send</button>
+    <button id="clearChat">Clear Chat</button>
+    <button id="biodataButton">Biodata</button>
+</div>
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
