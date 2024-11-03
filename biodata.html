@@ -16,64 +16,70 @@
             height: 100vh;
             margin: 0;
         }
-        h1 {
-            margin-bottom: 20px;
-        }
-        input {
-            margin: 10px;
+        input[type="text"], input[type="number"] {
             padding: 10px;
-            width: 300px;
+            margin: 5px;
+            width: 80%;
+            max-width: 400px;
+            border: none;
+            border-radius: 5px;
         }
         button {
             padding: 10px 15px;
-            margin-top: 10px;
+            margin: 5px;
+            cursor: pointer;
+            background-color: #555;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #777;
         }
     </style>
 </head>
 <body>
 
-<h1>Character Biodata</h1>
+<h1>Biodata</h1>
 <form id="biodataForm">
     <input type="text" id="aliasName" placeholder="Alias Name" required>
-    <input type="number" id="age" placeholder="Age" required>
+    <input type="text" id="age" placeholder="Age" required>
     <input type="text" id="gender" placeholder="Gender" required>
     <input type="text" id="sexuality" placeholder="Sexuality" required>
-    <input type="text" id="height" placeholder="Height" required>
-    <input type="text" id="weight" placeholder="Weight" required>
+    <input type="number" id="height" placeholder="Height (cm)" required>
+    <input type="number" id="weight" placeholder="Weight (kg)" required>
     <input type="text" id="bodyType" placeholder="Body Type" required>
     <input type="text" id="appearance" placeholder="Appearance" required>
     <input type="text" id="personality" placeholder="Personality" required>
     <input type="text" id="hobbies" placeholder="Hobbies" required>
-    <button type="submit">Submit</button>
+    <button type="submit">Save Biodata</button>
 </form>
-<button id="returnButton">Return to Chat</button>
 
 <script>
-    document.getElementById('biodataForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const aliasName = document.getElementById('aliasName').value;
-        const age = document.getElementById('age').value;
-        const gender = document.getElementById('gender').value;
-        const sexuality = document.getElementById('sexuality').value;
-        const height = document.getElementById('height').value;
-        const weight = document.getElementById('weight').value;
-        const bodyType = document.getElementById('bodyType').value;
-        const appearance = document.getElementById('appearance').value;
-        const personality = document.getElementById('personality').value;
-        const hobbies = document.getElementById('hobbies').value;
+    const biodataForm = document.getElementById('biodataForm');
+    biodataForm.onsubmit = function(event) {
+        event.preventDefault(); // Prevent form submission
 
-        // Save character details to localStorage
-        const character = { aliasName, age, gender, sexuality, height, weight, bodyType, appearance, personality, hobbies };
-        localStorage.setItem('character', JSON.stringify(character));
+        // Get form data
+        const character = {
+            aliasName: document.getElementById('aliasName').value,
+            age: document.getElementById('age').value,
+            gender: document.getElementById('gender').value,
+            sexuality: document.getElementById('sexuality').value,
+            height: document.getElementById('height').value,
+            weight: document.getElementById('weight').value,
+            bodyType: document.getElementById('bodyType').value,
+            appearance: document.getElementById('appearance').value,
+            personality: document.getElementById('personality').value,
+            hobbies: document.getElementById('hobbies').value
+        };
 
-        alert(`Character Created!\nAlias Name: ${aliasName}\nAge: ${age}\nGender: ${gender}\nSexuality: ${sexuality}\nHeight: ${height}\nWeight: ${weight}\nBody Type: ${bodyType}\nAppearance: ${appearance}\nPersonality: ${personality}\nHobbies: ${hobbies}`);
-        // Redirect back to the main page
-        window.location.href = 'index.html';
-    });
+        // Save to localStorage
+        localStorage.setItem('character', JSON.stringify(character)); // Store character data
 
-    document.getElementById('returnButton').addEventListener('click', () => {
-        window.location.href = 'index.html'; // Redirect back to the chat page
-    });
+        alert("Biodata saved successfully!"); // Alert for successful save
+        window.location.href = 'index.html'; // Redirect to main page after saving
+    };
 </script>
 
 </body>
