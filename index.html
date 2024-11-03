@@ -107,7 +107,7 @@
         }
 
         // Function to send a message
-        async function sendMessage() {
+        window.sendMessage = async function() { // Add window. to make it global
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
@@ -125,16 +125,16 @@
             } else {
                 alert("Please enter a message."); // Alert for empty message
             }
-        }
+        };
 
         // Function to clear chat
-        async function clearChat() {
+        window.clearChat = async function() { // Add window. to make it global
             const messagesRef = collection(db, "messages");
             const messagesSnapshot = await getDocs(messagesRef);
             messagesSnapshot.forEach(async (doc) => {
                 await deleteDoc(doc.ref);
             });
-        }
+        };
 
         // Load messages and render them
         window.onload = function() {
@@ -148,9 +148,9 @@
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message here...">
 <div class="button-container">
-    <button id="sendMessage" onclick="sendMessage()">Send Message</button>
+    <button id="sendMessage" onclick="sendMessage()">Send</button> <!-- Updated button label -->
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    <button id="biodataButton" onclick="window.location.href='biodata.html'">Create Character</button>
+    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button> <!-- Updated button label -->
 </div>
 
 </body>
