@@ -48,7 +48,7 @@
             background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
             color: black; /* Change text color for better contrast */
         }
-        #sendMessage, #clearChat, #biodataButton {
+        #sendMessage, #clearChat, #biodataButton, .locationButton {
             padding: 10px 15px;
             margin-top: 10px;
         }
@@ -57,6 +57,12 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+        }
+        .location-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
     </style>
     <!-- Firebase SDKs -->
@@ -162,9 +168,15 @@
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message here...">
 <div class="button-container">
-    <button id="sendMessage" onclick="sendMessage()">Send</button> <!-- Updated button label -->
+    <button id="sendMessage" onclick="sendMessage()">Send</button>
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button> <!-- Updated button label -->
+    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+</div>
+
+<div class="location-container">
+    <button class="locationButton" onclick="window.location.href='warehouse.html'">Abandoned Warehouse</button>
+    <button class="locationButton" onclick="window.location.href='downtown.html'">Downtown District</button>
+    <button class="locationButton" onclick="window.location.href='commercial.html'">Commercial District</button>
 </div>
 
 </body>
