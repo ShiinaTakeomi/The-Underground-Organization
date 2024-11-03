@@ -56,8 +56,8 @@
 <button id="clearChat">Clear Chat</button> <!-- Clear chat button -->
 
 <script>
-    // Initialize an empty messages array
-    let messages = [];
+    // Initialize an empty messages array or load from localStorage
+    let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
 
     // Function to format the UTC timestamp to local time
     function formatTimestamp(utcTimestamp) {
@@ -93,6 +93,7 @@
             };
             messages.push(newMessage);
             messageInput.value = ''; // Clear input field
+            localStorage.setItem('chatMessages', JSON.stringify(messages)); // Save messages to localStorage
             renderMessages(); // Re-render messages
         }
     });
@@ -100,6 +101,7 @@
     // Clear chat function
     document.getElementById('clearChat').addEventListener('click', () => {
         messages = []; // Clear messages array
+        localStorage.removeItem('chatMessages'); // Remove messages from localStorage
         renderMessages(); // Re-render messages
     });
 
