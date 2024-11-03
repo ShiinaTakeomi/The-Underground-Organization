@@ -74,6 +74,9 @@
             hobbies: document.getElementById('hobbies').value
         };
 
+        // Debugging: log the character data to the console
+        console.log("Character data to save:", character);
+
         // Save to localStorage
         localStorage.setItem('character', JSON.stringify(character)); // Store character data
 
