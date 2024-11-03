@@ -79,11 +79,11 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
 
-        // Function to load character data from localStorage
-        function loadCharacter() {
-            let character = JSON.parse(localStorage.getItem('character')) || {};
-            return character.aliasName ? character.aliasName : 'Anonymous'; // Use aliasName or default to 'Anonymous'
-        }
+        // Load character data from localStorage
+        let character = JSON.parse(localStorage.getItem('character')) || {}; // Default to empty object
+
+        // Update character name to use aliasName from biodata or default to 'Anonymous'
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous'; // Use aliasName or default to 'Anonymous'
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
@@ -114,7 +114,6 @@
         // Function to send a message
         window.sendMessage = async function() { // Add window. to make it global
             const messageInput = document.getElementById('messageInput');
-            const characterName = loadCharacter(); // Get character name
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
                     sender: characterName, // Use the character name
