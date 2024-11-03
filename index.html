@@ -54,9 +54,10 @@
             flex-wrap: wrap;
         }
     </style>
-    <!-- Firebase SDK -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-analytics.js"></script>
 </head>
 <body>
 
@@ -85,7 +86,7 @@
     };
 
     // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     // Variables
@@ -142,7 +143,6 @@
     });
 
     document.getElementById('clearChat').addEventListener('click', () => {
-        // You might not want to implement this as it clears Firestore too
         alert("Clearing the chat is not implemented."); 
     });
 
