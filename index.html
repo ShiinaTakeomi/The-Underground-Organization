@@ -67,19 +67,20 @@
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        // Initialize Firebase
+        // Import Firebase and Firestore
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
 
-        // Variables
+        // Your chat functionality here
         let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
-            const date = new Date(utcTimestamp * 1000);
+            const date = new Date(utcTimestamp);
             return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
         }
 
@@ -106,7 +107,7 @@
                 const newMessage = {
                     sender: character.name,
                     content: messageInput.value,
-                    timestamp: Math.floor(Date.now() / 1000)
+                    timestamp: Date.now() // Use current timestamp in milliseconds
                 };
                 // Add message to Firestore
                 await addDoc(collection(db, "messages"), newMessage);
@@ -120,12 +121,12 @@
         // Function to clear chat
         async function clearChat() {
             const messagesRef = collection(db, "messages");
-            const querySnapshot = await getDocs(messagesRef);
-            const deletePromises = [];
+            const querySnapshot = await getDocs(query(messagesRef));
+            const batch = writeBatch(db); // Create a batch for deleting
             querySnapshot.forEach((doc) => {
-                deletePromises.push(deleteDoc(doc.ref));
+                batch.delete(doc.ref); // Add delete operation for each message
             });
-            await Promise.all(deletePromises); // Wait for all deletions to complete
+            await batch.commit(); // Commit the batch
             renderMessages(); // Refresh message display
         }
 
@@ -139,7 +140,7 @@
             }
         });
 
-        document.getElementById('clearChat').addEventListener('click', clearChat); // Updated to clear chat
+        document.getElementById('clearChat').addEventListener('click', clearChat);
 
         document.getElementById('biodataButton').addEventListener('click', () => {
             window.location.href = 'biodata.html'; // Redirect to the biodata page
@@ -160,8 +161,8 @@
 </form>
 <div class="button-container">
     <button type="button" id="sendMessage">Send</button>
-    <button type="button" id="clearChat">Clear Chat</button> <!-- Changed to type="button" -->
-    <button id="biodataButton">Biodata</button>
+    <button type="button" id="clearChat">Clear Chat</button>
+    <button type="button" id="biodataButton">Biodata</button>
 </div>
 
 </body>
