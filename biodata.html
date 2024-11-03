@@ -3,38 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Biodata</title>
+    <title>Biodata - The Underground Organization</title>
+    <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
-            background-color: #222;
+            background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
-        input[type="text"], input[type="number"] {
-            padding: 10px;
-            margin: 5px;
-            width: 80%;
-            max-width: 400px;
-            border: none;
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
             border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
         }
         button {
             padding: 10px 15px;
-            margin: 5px;
-            cursor: pointer;
-            background-color: #555;
+            background-color: rgba(0, 0, 0, 0.8);
             color: white;
             border: none;
             border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #777;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
         }
     </style>
 </head>
@@ -42,26 +70,70 @@
 
 <h1>Biodata</h1>
 <form id="biodataForm">
-    <input type="text" id="aliasName" placeholder="Alias Name" required>
-    <input type="text" id="age" placeholder="Age" required>
-    <input type="text" id="gender" placeholder="Gender" required>
-    <input type="text" id="sexuality" placeholder="Sexuality" required>
-    <input type="number" id="height" placeholder="Height (cm)" required>
-    <input type="number" id="weight" placeholder="Weight (kg)" required>
-    <input type="text" id="bodyType" placeholder="Body Type" required>
-    <input type="text" id="appearance" placeholder="Appearance" required>
-    <input type="text" id="personality" placeholder="Personality" required>
-    <input type="text" id="hobbies" placeholder="Hobbies" required>
+    <label for="aliasName">Alias Name:</label>
+    <input type="text" id="aliasName" name="aliasName" required>
+    
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required>
+    
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" name="gender" required>
+    
+    <label for="sexuality">Sexuality:</label>
+    <input type="text" id="sexuality" name="sexuality" required>
+    
+    <label for="height">Height:</label>
+    <input type="text" id="height" name="height" required>
+    
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" name="weight" required>
+    
+    <label for="bodyType">Body Type:</label>
+    <input type="text" id="bodyType" name="bodyType" required>
+    
+    <label for="appearance">Appearance:</label>
+    <textarea id="appearance" name="appearance" rows="4" required></textarea>
+    
+    <label for="personality">Personality:</label>
+    <textarea id="personality" name="personality" rows="4" required></textarea>
+    
+    <label for="hobbies">Hobbies:</label>
+    <textarea id="hobbies" name="hobbies" rows="4"></textarea>
+    
     <button type="submit">Save Biodata</button>
 </form>
 
-<script>
-    const biodataForm = document.getElementById('biodataForm');
-    biodataForm.onsubmit = function(event) {
-        event.preventDefault(); // Prevent form submission
+<div class="button-container">
+    <button onclick="navigateTo('index.html')">Back to Main Page</button>
+</div>
 
-        // Get form data
-        const character = {
+<script>
+    // Load character data from localStorage
+    let character = JSON.parse(localStorage.getItem('character')) || {};
+
+    // Populate form fields with character data
+    document.getElementById('aliasName').value = character.aliasName || '';
+    document.getElementById('age').value = character.age || '';
+    document.getElementById('gender').value = character.gender || '';
+    document.getElementById('sexuality').value = character.sexuality || '';
+    document.getElementById('height').value = character.height || '';
+    document.getElementById('weight').value = character.weight || '';
+    document.getElementById('bodyType').value = character.bodyType || '';
+    document.getElementById('appearance').value = character.appearance || '';
+    document.getElementById('personality').value = character.personality || '';
+    document.getElementById('hobbies').value = character.hobbies || '';
+
+    // Function to navigate to another page
+    function navigateTo(url) {
+        window.location.href = url;
+    }
+
+    // Handle form submission
+    document.getElementById('biodataForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        // Gather data from the form
+        const formData = {
             aliasName: document.getElementById('aliasName').value,
             age: document.getElementById('age').value,
             gender: document.getElementById('gender').value,
@@ -71,17 +143,13 @@
             bodyType: document.getElementById('bodyType').value,
             appearance: document.getElementById('appearance').value,
             personality: document.getElementById('personality').value,
-            hobbies: document.getElementById('hobbies').value
+            hobbies: document.getElementById('hobbies').value,
         };
 
-        // Debugging: log the character data to the console
-        console.log("Character data to save:", character);
-
         // Save to localStorage
-        localStorage.setItem('character', JSON.stringify(character)); // Store character data
-
-        alert("Biodata saved successfully!"); // Alert for successful save
-        window.location.href = 'index.html'; // Redirect to main page after saving
+        localStorage.setItem('character', JSON.stringify(formData));
+        alert('Biodata saved successfully!');
+        navigateTo('index.html'); // Redirect back to the main page
     };
 </script>
 
