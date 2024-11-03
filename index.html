@@ -96,8 +96,9 @@
     // Allow sending message with Enter key
     document.getElementById('messageInput').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
-            sendMessage();
+            console.log("Enter key pressed"); // Debugging log
             event.preventDefault(); // Prevent default action
+            sendMessage(); // Call the sendMessage function
         }
     });
 
