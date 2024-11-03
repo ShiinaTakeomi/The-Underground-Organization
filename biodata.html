@@ -19,7 +19,7 @@
         h1 {
             margin-bottom: 20px;
         }
-        input, textarea {
+        input {
             margin: 10px;
             padding: 10px;
             width: 300px;
@@ -34,16 +34,16 @@
 
 <h1>Character Biodata</h1>
 <form id="biodataForm">
-    <input type="text" id="alias" placeholder="Alias Name" required>
+    <input type="text" id="aliasName" placeholder="Alias Name" required>
     <input type="number" id="age" placeholder="Age" required>
     <input type="text" id="gender" placeholder="Gender" required>
     <input type="text" id="sexuality" placeholder="Sexuality" required>
-    <input type="number" id="height" placeholder="Height (cm)" required>
-    <input type="number" id="weight" placeholder="Weight (kg)" required>
+    <input type="text" id="height" placeholder="Height" required>
+    <input type="text" id="weight" placeholder="Weight" required>
     <input type="text" id="bodyType" placeholder="Body Type" required>
-    <textarea id="appearance" placeholder="Appearance" rows="3" required></textarea>
-    <textarea id="personality" placeholder="Personality" rows="3" required></textarea>
-    <textarea id="hobbies" placeholder="Hobbies" rows="3" required></textarea>
+    <input type="text" id="appearance" placeholder="Appearance" required>
+    <input type="text" id="personality" placeholder="Personality" required>
+    <input type="text" id="hobbies" placeholder="Hobbies" required>
     <button type="submit">Submit</button>
 </form>
 <button id="returnButton">Return to Chat</button>
@@ -51,7 +51,7 @@
 <script>
     document.getElementById('biodataForm').addEventListener('submit', function(event) {
         event.preventDefault();
-        const alias = document.getElementById('alias').value;
+        const aliasName = document.getElementById('aliasName').value;
         const age = document.getElementById('age').value;
         const gender = document.getElementById('gender').value;
         const sexuality = document.getElementById('sexuality').value;
@@ -63,10 +63,10 @@
         const hobbies = document.getElementById('hobbies').value;
 
         // Save character details to localStorage
-        const character = { alias, age, gender, sexuality, height, weight, bodyType, appearance, personality, hobbies };
+        const character = { aliasName, age, gender, sexuality, height, weight, bodyType, appearance, personality, hobbies };
         localStorage.setItem('character', JSON.stringify(character));
 
-        alert(`Character Created!\nAlias: ${alias}\nAge: ${age}\nGender: ${gender}\nSexuality: ${sexuality}\nHeight: ${height} cm\nWeight: ${weight} kg\nBody Type: ${bodyType}\nAppearance: ${appearance}\nPersonality: ${personality}\nHobbies: ${hobbies}`);
+        alert(`Character Created!\nAlias Name: ${aliasName}\nAge: ${age}\nGender: ${gender}\nSexuality: ${sexuality}\nHeight: ${height}\nWeight: ${weight}\nBody Type: ${bodyType}\nAppearance: ${appearance}\nPersonality: ${personality}\nHobbies: ${hobbies}`);
         // Redirect back to the main page
         window.location.href = 'index.html';
     });
