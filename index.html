@@ -32,6 +32,11 @@
             border-radius: 5px;
             width: 400px;
         }
+        #chatForm {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
         #messageInput {
             width: 80%;
             padding: 10px;
@@ -40,6 +45,11 @@
         #sendMessage, #clearChat, #biodataButton {
             padding: 10px 15px;
             margin-top: 10px;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            width: 100%;
         }
     </style>
 </head>
@@ -52,8 +62,10 @@
     <input type="text" id="messageInput" placeholder="Type your message..." required>
     <button type="button" id="sendMessage">Send</button>
 </form>
-<button id="clearChat">Clear Chat</button>
-<button id="biodataButton">Biodata</button>
+<div class="button-container">
+    <button id="clearChat">Clear Chat</button>
+    <button id="biodataButton">Biodata</button>
+</div>
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
