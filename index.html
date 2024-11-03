@@ -156,6 +156,7 @@
 
         // Function to navigate to another page with loading message
         function navigateTo(url) {
+            console.log("Navigating to:", url); // Debugging: log the URL
             document.body.innerHTML = "<h2>Loading...</h2>"; // Show loading message
             setTimeout(() => {
                 window.location.href = url; // Navigate after a short delay
