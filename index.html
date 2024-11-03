@@ -16,6 +16,7 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
+            position: relative; /* Enable positioning for child elements */
         }
         h1 {
             text-align: center;
@@ -37,15 +38,27 @@
             padding: 10px;
             margin-right: 10px;
         }
-        #sendMessage, #clearChat, #biodataButton {
+        #sendMessage, #clearChat {
             padding: 10px 15px;
             margin: 0 5px; /* Adds spacing between buttons */
         }
-        #chatForm, .button-container {
+        #chatForm {
             display: flex;
             justify-content: center;
             align-items: center; /* Center items vertically */
             margin-top: 10px;
+        }
+        #clearChat {
+            position: absolute; /* Position at top right */
+            top: 20px;
+            right: 20px;
+        }
+        #biodataButton {
+            padding: 10px 15px;
+            position: absolute; /* Position at right middle */
+            right: 20px;
+            top: 50%; /* Center vertically */
+            transform: translateY(-50%); /* Adjust for button height */
         }
     </style>
 </head>
@@ -58,10 +71,8 @@
     <input type="text" id="messageInput" placeholder="Type your message..." required>
     <button type="button" id="sendMessage">Send</button>
 </form>
-<div class="button-container">
-    <button id="clearChat">Clear Chat</button>
-    <button id="biodataButton">Biodata</button>
-</div>
+<button id="clearChat">Clear Chat</button>
+<button id="biodataButton">Biodata</button>
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
