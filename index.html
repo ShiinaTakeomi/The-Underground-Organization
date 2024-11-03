@@ -135,11 +135,14 @@
 
         // Function to clear chat
         window.clearChat = async function() { // Add window. to make it global
-            const messagesRef = collection(db, "abandoned_warehouse_messages");
-            const messagesSnapshot = await getDocs(messagesRef);
-            messagesSnapshot.forEach(async (doc) => {
-                await deleteDoc(doc.ref);
-            });
+            const confirmClear = confirm("Are you sure you want to clear the chat?");
+            if (confirmClear) {
+                const messagesRef = collection(db, "abandoned_warehouse_messages");
+                const messagesSnapshot = await getDocs(messagesRef);
+                messagesSnapshot.forEach(async (doc) => {
+                    await deleteDoc(doc.ref);
+                });
+            }
         };
 
         // Load messages and render them
