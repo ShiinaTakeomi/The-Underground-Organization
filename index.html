@@ -31,13 +31,12 @@
         { sender: 'krad', content: 'nono', timestamp: 1698889390 },
         { sender: 'kai', content: 'yippiii', timestamp: 1698889469 },
         { sender: 'kai', content: 'yeah', timestamp: 1698889474 },
-        // Add more messages here with correct UTC timestamps
     ];
 
     // Function to format the UTC timestamp to local time
     function formatTimestamp(utcTimestamp) {
-        const date = new Date(utcTimestamp * 1000); // Convert to milliseconds
-        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Format to Malaysian time
+        const date = new Date(utcTimestamp * 1000); // Convert seconds to milliseconds
+        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Format for Malaysian time
     }
 
     // Function to render chat messages
@@ -57,4 +56,24 @@
         chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
     }
 
-    // Send
+    // Send message function
+    document.getElementById('sendMessage').addEventListener('click', () => {
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput.value.trim() !== '') {
+            const newMessage = {
+                sender: 'You', // Replace with actual sender
+                content: messageInput.value,
+                timestamp: Math.floor(Date.now() / 1000) // Current time in seconds
+            };
+            messages.push(newMessage);
+            messageInput.value = ''; // Clear input field
+            renderMessages(); // Re-render messages
+        }
+    });
+
+    // Initial render of messages
+    renderMessages();
+</script>
+
+</body>
+</html>
