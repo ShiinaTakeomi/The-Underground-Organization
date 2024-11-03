@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Underground Organization</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon link -->
     <style>
         body {
             background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg');
@@ -16,7 +17,6 @@
             justify-content: center; /* Center the chat box vertically */
             height: 100vh; /* Full height */
             margin: 0; /* Remove default margin */
-            position: relative; /* For positioning the clear button */
         }
         #chatBox {
             border: 1px solid #ccc;
@@ -36,23 +36,10 @@
         #sendMessage {
             padding: 10px 15px; /* Padding for the send button */
         }
-        #clearChat {
-            position: absolute; /* Position it at the top right */
-            top: 10px;
-            right: 10px;
-            background-color: rgba(255, 0, 0, 0.8); /* Red background for visibility */
-            color: white;
-            border: none;
-            border-radius: 5px; /* Rounded corners */
-            cursor: pointer; /* Pointer cursor on hover */
-            padding: 5px 10px; /* Padding for the button */
-            font-size: 12px; /* Smaller font size */
-        }
     </style>
 </head>
 <body>
 
-<button id="clearChat">Clear Chat</button>
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message...">
 <button id="sendMessage">Send</button>
@@ -91,7 +78,7 @@
     }
 
     // Send message function
-    function sendMessage() {
+    document.getElementById('sendMessage').addEventListener('click', () => {
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
@@ -103,19 +90,12 @@
             messageInput.value = ''; // Clear input field
             renderMessages(); // Re-render messages
         }
-    }
-
-    // Clear chat function
-    document.getElementById('clearChat').addEventListener('click', () => {
-        messages = []; // Clear messages array
-        renderMessages(); // Re-render messages
     });
 
-    // Event listeners
-    document.getElementById('sendMessage').addEventListener('click', sendMessage);
-    document.getElementById('messageInput').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            sendMessage(); // Send message on Enter key press
+    // Handle Enter key to send message
+    document.getElementById('messageInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('sendMessage').click();
         }
     });
 
