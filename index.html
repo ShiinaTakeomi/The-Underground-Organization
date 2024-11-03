@@ -16,7 +16,6 @@
             width: 80%;
         }
     </style>
-    <!-- Load date-fns and date-fns-tz from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/date-fns@2.28.0/dist/date-fns.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/date-fns-tz@1.3.0/dist/date-fns-tz.min.js"></script>
 </head>
@@ -34,17 +33,15 @@
         { sender: 'krad', content: 'nono', timestamp: 1698889390 },
         { sender: 'kai', content: 'yippiii', timestamp: 1698889469 },
         { sender: 'kai', content: 'yeah', timestamp: 1698889474 },
-        // Add more messages here with correct UTC timestamps
     ];
 
     // Function to format the UTC timestamp to Malaysian time
     function formatTimestamp(utcTimestamp) {
-        const utcDate = new Date(utcTimestamp * 1000); // Convert Unix timestamp to milliseconds
-        const malaysianTime = window.dateFnsTz.utcToZonedTime(utcDate, 'Asia/Kuala_Lumpur');
-        return window.dateFns.format(malaysianTime, 'dd/MM/yyyy, hh:mm:ss a'); // Format as desired
+        const malaysianTime = dateFnsTz.utcToZonedTime(new Date(utcTimestamp * 1000), 'Asia/Kuala_Lumpur');
+        return dateFns.format(malaysianTime, 'dd/MM/yyyy, hh:mm:ss a'); // Format as desired
     }
 
-    // Function to render chat messages
+    // Example function to render chat messages
     function renderMessages() {
         const chatBox = document.getElementById('chatBox');
         chatBox.innerHTML = ''; // Clear existing messages
