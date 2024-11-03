@@ -55,7 +55,7 @@
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    let character = JSON.parse(localStorage.getItem('character')) || {};
+    let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
 
     function formatTimestamp(utcTimestamp) {
         const date = new Date(utcTimestamp * 1000);
@@ -71,14 +71,14 @@
             messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
             chatBox.appendChild(messageElement);
         });
-        chatBox.scrollTop = chatBox.scrollHeight;
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
     }
 
     function sendMessage() {
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
-                sender: character.name || 'You',
+                sender: character.name,
                 content: messageInput.value,
                 timestamp: Math.floor(Date.now() / 1000)
             };
@@ -86,17 +86,18 @@
             messageInput.value = '';
             localStorage.setItem('chatMessages', JSON.stringify(messages));
             renderMessages();
+        } else {
+            alert("Please enter a message."); // Alert for empty message
         }
     }
 
-    // Send message when send button is clicked
     document.getElementById('sendMessage').addEventListener('click', sendMessage);
 
-    // Send message when 'Enter' key is pressed
+    // Allow sending message with Enter key
     document.getElementById('messageInput').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') {
             sendMessage();
-            event.preventDefault(); // Prevent default action (e.g., form submission)
+            event.preventDefault(); // Prevent default action
         }
     });
 
