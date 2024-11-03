@@ -87,7 +87,7 @@
 
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(app); // Initialize Firestore
+    const db = firebase.firestore(); // Initialize Firestore
 
     // Variables
     let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
