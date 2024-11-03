@@ -67,20 +67,19 @@
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        // Import Firebase and Firestore
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
-
         // Initialize Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
 
-        // Your chat functionality here
+        // Variables
         let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
-            const date = new Date(utcTimestamp);
+            const date = new Date(utcTimestamp * 1000);
             return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
         }
 
@@ -107,7 +106,7 @@
                 const newMessage = {
                     sender: character.name,
                     content: messageInput.value,
-                    timestamp: Date.now() // Use current timestamp in milliseconds
+                    timestamp: Math.floor(Date.now() / 1000)
                 };
                 // Add message to Firestore
                 await addDoc(collection(db, "messages"), newMessage);
@@ -116,6 +115,18 @@
             } else {
                 alert("Please enter a message."); // Alert for empty message
             }
+        }
+
+        // Function to clear chat
+        async function clearChat() {
+            const messagesRef = collection(db, "messages");
+            const querySnapshot = await getDocs(messagesRef);
+            const deletePromises = [];
+            querySnapshot.forEach((doc) => {
+                deletePromises.push(deleteDoc(doc.ref));
+            });
+            await Promise.all(deletePromises); // Wait for all deletions to complete
+            renderMessages(); // Refresh message display
         }
 
         document.getElementById('sendMessage').addEventListener('click', sendMessage);
@@ -128,9 +139,7 @@
             }
         });
 
-        document.getElementById('clearChat').addEventListener('click', () => {
-            alert("Clearing the chat is not implemented."); 
-        });
+        document.getElementById('clearChat').addEventListener('click', clearChat); // Updated to clear chat
 
         document.getElementById('biodataButton').addEventListener('click', () => {
             window.location.href = 'biodata.html'; // Redirect to the biodata page
@@ -151,7 +160,7 @@
 </form>
 <div class="button-container">
     <button type="button" id="sendMessage">Send</button>
-    <button id="clearChat">Clear Chat</button>
+    <button type="button" id="clearChat">Clear Chat</button> <!-- Changed to type="button" -->
     <button id="biodataButton">Biodata</button>
 </div>
 
