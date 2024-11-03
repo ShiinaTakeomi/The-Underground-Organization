@@ -69,7 +69,7 @@
 
         // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, orderBy, query, onSnapshot } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
@@ -108,7 +108,7 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: character.name,
+                    sender: character.name || 'Anonymous', // Ensure sender has a default value
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
