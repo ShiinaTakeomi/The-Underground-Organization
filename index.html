@@ -32,25 +32,20 @@
             border-radius: 5px;
             width: 400px;
         }
-        #chatForm {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 10px; /* Added margin to separate from buttons */
-        }
         #messageInput {
             width: 80%;
             padding: 10px;
             margin-right: 10px;
         }
-        .button-container {
+        #sendMessage, #clearChat, #biodataButton {
+            padding: 10px 15px;
+            margin: 0 5px; /* Adds spacing between buttons */
+        }
+        #chatForm, .button-container {
             display: flex;
             justify-content: center;
-            width: 100%;
-        }
-        button {
-            padding: 10px 15px;
-            margin: 0 10px; /* Added margin for spacing */
+            align-items: center; /* Center items vertically */
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -61,9 +56,9 @@
 <div id="chatBox"></div>
 <form id="chatForm">
     <input type="text" id="messageInput" placeholder="Type your message..." required>
+    <button type="button" id="sendMessage">Send</button>
 </form>
 <div class="button-container">
-    <button type="button" id="sendMessage">Send</button>
     <button id="clearChat">Clear Chat</button>
     <button id="biodataButton">Biodata</button>
 </div>
