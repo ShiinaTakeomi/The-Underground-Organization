@@ -135,6 +135,7 @@
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
+                    alert("Failed to send message. Please try again."); // Alert for failed message send
                 }
             } else {
                 alert("Please enter a message."); // Alert for empty message
@@ -179,13 +180,13 @@
 <body>
 
 <h1>Abandoned Warehouse</h1>
-<div id="chatBox"></div>
-<input type="text" id="messageInput" placeholder="Type your message here...">
+<div id="chatBox" role="log" aria-live="polite"></div>
+<input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
 <div class="button-container">
-    <button id="sendMessage" onclick="sendMessage()">Send</button>
-    <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    <button id="biodataButton" onclick="navigateTo('biodata.html')">Biodata</button>
-    <button onclick="navigateTo('index.html')">Back to Main</button> <!-- Button to return to the main page -->
+    <button id="sendMessage" onclick="sendMessage()" aria-label="Send message">Send</button>
+    <button id="clearChat" onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
+    <button id="biodataButton" onclick="navigateTo('biodata.html')" aria-label="View biodata">Biodata</button>
+    <button onclick="navigateTo('index.html')" aria-label="Back to main page">Back to Main</button> <!-- Button to return to the main page -->
 </div>
 
 </body>
