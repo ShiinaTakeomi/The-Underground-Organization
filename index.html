@@ -10,6 +10,12 @@
             background-size: cover; /* Cover the entire screen */
             color: white; /* Text color for readability */
             font-family: Arial, sans-serif; /* Font styling */
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the chat box */
+            justify-content: center; /* Center the chat box vertically */
+            height: 100vh; /* Full height */
+            margin: 0; /* Remove default margin */
         }
         #chatBox {
             border: 1px solid #ccc;
@@ -19,6 +25,7 @@
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for chat box */
             border-radius: 5px; /* Rounded corners */
+            width: 400px; /* Fixed width for the chat box */
         }
         #messageInput {
             width: 80%;
@@ -62,6 +69,7 @@
 
         messages.forEach(message => {
             const messageElement = document.createElement('div');
+            // Corrected the quotes to use backticks for template literals
             messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
             chatBox.appendChild(messageElement);
         });
