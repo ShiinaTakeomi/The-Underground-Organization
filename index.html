@@ -37,10 +37,7 @@
             padding: 10px;
             margin-right: 10px;
         }
-        #sendMessage {
-            padding: 10px 15px;
-        }
-        #clearChat {
+        #sendMessage, #clearChat, #biodataButton {
             padding: 10px 15px;
             margin-top: 10px;
         }
@@ -66,20 +63,11 @@
 <input type="text" id="messageInput" placeholder="Type your message...">
 <button id="sendMessage">Send</button>
 <button id="clearChat">Clear Chat</button>
-
-<!-- Character Sheet Section -->
-<div id="characterSheet">
-    <h2>Create Your Character</h2>
-    <input type="text" id="characterName" placeholder="Character Name">
-    <input type="text" id="characterClass" placeholder="Character Class">
-    <input type="text" id="characterDescription" placeholder="Character Description">
-    <button id="createCharacter">Create Character</button>
-</div>
+<button id="biodataButton">Biodata</button>
 
 <script>
     let messages = JSON.parse(localStorage.getItem('chatMessages')) || [];
-    let character = {};
-
+    
     function formatTimestamp(utcTimestamp) {
         const date = new Date(utcTimestamp * 1000);
         return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
@@ -101,7 +89,7 @@
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
-                sender: character.name || 'You',
+                sender: 'You',
                 content: messageInput.value,
                 timestamp: Math.floor(Date.now() / 1000)
             };
@@ -118,18 +106,8 @@
         renderMessages();
     });
 
-    document.getElementById('createCharacter').addEventListener('click', () => {
-        const name = document.getElementById('characterName').value;
-        const charClass = document.getElementById('characterClass').value;
-        const description = document.getElementById('characterDescription').value;
-        character = { name, charClass, description };
-        alert(`Character ${name} created!`);
-    });
-
-    document.getElementById('messageInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            document.getElementById('sendMessage').click();
-        }
+    document.getElementById('biodataButton').addEventListener('click', () => {
+        window.location.href = 'biodata.html'; // Redirect to the biodata page
     });
 
     renderMessages();
