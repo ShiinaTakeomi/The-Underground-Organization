@@ -69,7 +69,7 @@
 
         // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
@@ -113,8 +113,12 @@
                     timestamp: Math.floor(Date.now() / 1000)
                 };
                 // Add message to Firestore
-                await addDoc(collection(db, "messages"), newMessage);
-                messageInput.value = ''; // Clear input field
+                try {
+                    await addDoc(collection(db, "messages"), newMessage);
+                    messageInput.value = ''; // Clear input field
+                } catch (error) {
+                    console.error("Error sending message: ", error);
+                }
             } else {
                 alert("Please enter a message."); // Alert for empty message
             }
