@@ -108,7 +108,7 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: character.name || 'Anonymous', // Ensure sender has a default value
+                    sender: character.name && character.name !== 'You' ? character.name : 'Anonymous', // Ensure sender has a default value
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
@@ -166,7 +166,7 @@
 </form>
 <div class="button-container">
     <button type="button" id="sendMessage">Send</button>
-    <button type="button" id="clearChat">Clear Chat</button> <!-- Changed to type="button" -->
+    <button type="button" id="clearChat">Clear Chat</button>
     <button id="biodataButton">Biodata</button>
 </div>
 
