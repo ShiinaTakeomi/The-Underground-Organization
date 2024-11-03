@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abandoned Warehouse</title>
+    <title>Abandoned Warehouse - The Underground Organization</title>
     <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
@@ -48,7 +48,7 @@
             background-color: rgba(255, 255, 255, 0.8); /* Light background for visibility */
             color: black; /* Change text color for better contrast */
         }
-        #sendMessage, #clearChat {
+        #sendMessage, #clearChat, #biodataButton, .locationButton {
             padding: 10px 15px;
             margin-top: 10px;
             cursor: pointer;
@@ -96,7 +96,7 @@
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Use a different collection for warehouse
+            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Use a separate collection for the abandoned warehouse
             const q = query(messagesRef, orderBy("timestamp"));
 
             // Use onSnapshot for real-time updates
@@ -123,7 +123,7 @@
                 };
                 // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Different collection
+                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
@@ -159,12 +159,14 @@
 </head>
 <body>
 
-<h1>Abandoned Warehouse Chat Room</h1>
+<h1>Abandoned Warehouse</h1>
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message here...">
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()">Send</button>
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+    <button onclick="window.location.href='index.html'">Back to Main</button> <!-- Button to return to the main page -->
 </div>
 
 </body>
