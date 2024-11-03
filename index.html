@@ -35,6 +35,10 @@
         #sendMessage {
             padding: 10px 15px; /* Padding for the send button */
         }
+        #clearChat {
+            padding: 10px 15px; /* Padding for the clear button */
+            margin-top: 10px; /* Space above the clear button */
+        }
     </style>
 </head>
 <body>
@@ -42,16 +46,11 @@
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message...">
 <button id="sendMessage">Send</button>
+<button id="clearChat">Clear Chat</button> <!-- Clear chat button -->
 
 <script>
-    // Sample messages array
-    let messages = [
-        { sender: 'krad', content: 'oh yea', timestamp: 1698889381 },
-        { sender: 'krad', content: 'lets take a trip', timestamp: 1698889386 },
-        { sender: 'krad', content: 'nono', timestamp: 1698889390 },
-        { sender: 'kai', content: 'yippiii', timestamp: 1698889469 },
-        { sender: 'kai', content: 'yeah', timestamp: 1698889474 },
-    ];
+    // Initialize an empty messages array
+    let messages = [];
 
     // Function to format the UTC timestamp to local time
     function formatTimestamp(utcTimestamp) {
@@ -89,6 +88,12 @@
             messageInput.value = ''; // Clear input field
             renderMessages(); // Re-render messages
         }
+    });
+
+    // Clear chat function
+    document.getElementById('clearChat').addEventListener('click', () => {
+        messages = []; // Clear messages array
+        renderMessages(); // Re-render messages
     });
 
     // Handle Enter key to send message
