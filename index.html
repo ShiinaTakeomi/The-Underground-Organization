@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Underground Organization</title>
+    <title>Abandoned Warehouse - The Underground Organization</title>
     <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
@@ -59,12 +59,6 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        .location-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
-        }
     </style>
     <!-- Firebase SDKs -->
     <script type="module">
@@ -102,7 +96,7 @@
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "messages");
+            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Use a separate collection for the abandoned warehouse
             const q = query(messagesRef, orderBy("timestamp"));
 
             // Use onSnapshot for real-time updates
@@ -129,7 +123,7 @@
                 };
                 // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "messages"), newMessage);
+                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
@@ -141,7 +135,7 @@
 
         // Function to clear chat
         window.clearChat = async function() { // Add window. to make it global
-            const messagesRef = collection(db, "messages");
+            const messagesRef = collection(db, "abandoned_warehouse_messages");
             const messagesSnapshot = await getDocs(messagesRef);
             messagesSnapshot.forEach(async (doc) => {
                 await deleteDoc(doc.ref);
@@ -165,19 +159,14 @@
 </head>
 <body>
 
-<h1>The Underground Organization</h1>
+<h1>Abandoned Warehouse</h1>
 <div id="chatBox"></div>
 <input type="text" id="messageInput" placeholder="Type your message here...">
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()">Send</button>
     <button id="clearChat" onclick="clearChat()">Clear Chat</button>
     <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-</div>
-
-<div class="location-container">
-    <button class="locationButton" onclick="window.location.href='abandoned-warehouse.html'">Abandoned Warehouse</button> <!-- Updated link here -->
-    <button class="locationButton" onclick="window.location.href='downtown.html'">Downtown District</button>
-    <button class="locationButton" onclick="window.location.href='commercial.html'">Commercial District</button>
+    <button onclick="window.location.href='index.html'">Back to Main</button> <!-- Button to return to the main page -->
 </div>
 
 </body>
