@@ -55,9 +55,91 @@
         }
     </style>
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-analytics.js"></script>
+    <script type="module">
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
+            authDomain: "index-d3482.firebaseapp.com",
+            projectId: "index-d3482",
+            storageBucket: "index-d3482.firebasestorage.app",
+            messagingSenderId: "766904853047",
+            appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
+            measurementId: "G-PSTV5VW1ZW"
+        };
+
+        // Import the Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app); // Initialize Firestore
+
+        // Variables
+        let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
+
+        // Function to format timestamp
+        function formatTimestamp(utcTimestamp) {
+            const date = new Date(utcTimestamp * 1000);
+            return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
+        }
+
+        // Function to render messages from Firestore
+        async function renderMessages() {
+            const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = ''; // Clear chat box
+            const messagesRef = collection(db, "messages"); // Access the messages collection
+            const q = query(messagesRef, orderBy("timestamp")); // Query to order messages by timestamp
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((doc) => {
+                const message = doc.data();
+                const messageElement = document.createElement('div');
+                messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+                chatBox.appendChild(messageElement);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
+        }
+
+        // Function to send a message
+        async function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput.value.trim() !== '') {
+                const newMessage = {
+                    sender: character.name,
+                    content: messageInput.value,
+                    timestamp: Math.floor(Date.now() / 1000)
+                };
+                // Add message to Firestore
+                await addDoc(collection(db, "messages"), newMessage); // Add message to the messages collection
+                messageInput.value = ''; // Clear input field
+                renderMessages(); // Refresh message display
+            } else {
+                alert("Please enter a message."); // Alert for empty message
+            }
+        }
+
+        document.getElementById('sendMessage').addEventListener('click', sendMessage);
+
+        // Allow sending message with Enter key
+        document.getElementById('chatForm').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                sendMessage(); // Call the sendMessage function
+            }
+        });
+
+        document.getElementById('clearChat').addEventListener('click', () => {
+            alert("Clearing the chat is not implemented."); 
+        });
+
+        document.getElementById('biodataButton').addEventListener('click', () => {
+            window.location.href = 'biodata.html'; // Redirect to the biodata page
+        });
+
+        // Call to render messages initially
+        renderMessages();
+    </script>
+
 </head>
 <body>
 
@@ -72,85 +154,6 @@
     <button id="clearChat">Clear Chat</button>
     <button id="biodataButton">Biodata</button>
 </div>
-
-<script>
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
-        authDomain: "index-d3482.firebaseapp.com",
-        projectId: "index-d3482",
-        storageBucket: "index-d3482.firebasestorage.app",
-        messagingSenderId: "766904853047",
-        appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
-        measurementId: "G-PSTV5VW1ZW"
-    };
-
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(); // Initialize Firestore
-
-    // Variables
-    let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
-
-    // Function to format timestamp
-    function formatTimestamp(utcTimestamp) {
-        const date = new Date(utcTimestamp * 1000);
-        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
-    }
-
-    // Function to render messages from Firestore
-    async function renderMessages() {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML = ''; // Clear chat box
-        const querySnapshot = await db.collection("chat").orderBy("timestamp").get(); // Changed 'messages' to 'chat'
-        querySnapshot.forEach((doc) => {
-            const message = doc.data();
-            const messageElement = document.createElement('div');
-            messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
-            chatBox.appendChild(messageElement);
-        });
-        chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
-    }
-
-    // Function to send a message
-    async function sendMessage() {
-        const messageInput = document.getElementById('messageInput');
-        if (messageInput.value.trim() !== '') {
-            const newMessage = {
-                sender: character.name,
-                content: messageInput.value,
-                timestamp: Math.floor(Date.now() / 1000)
-            };
-            // Add message to Firestore
-            await db.collection("chat").add(newMessage); // Changed 'messages' to 'chat'
-            messageInput.value = ''; // Clear input field
-            renderMessages(); // Refresh message display
-        } else {
-            alert("Please enter a message."); // Alert for empty message
-        }
-    }
-
-    document.getElementById('sendMessage').addEventListener('click', sendMessage);
-
-    // Allow sending message with Enter key
-    document.getElementById('chatForm').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Prevent form submission
-            sendMessage(); // Call the sendMessage function
-        }
-    });
-
-    document.getElementById('clearChat').addEventListener('click', () => {
-        alert("Clearing the chat is not implemented."); 
-    });
-
-    document.getElementById('biodataButton').addEventListener('click', () => {
-        window.location.href = 'biodata.html'; // Redirect to the biodata page
-    });
-
-    // Call to render messages initially
-    renderMessages();
-</script>
 
 </body>
 </html>
