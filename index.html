@@ -8,7 +8,7 @@
     <style>
         body {
             background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg');
-            background-size: contain; /* Ensures the full image fits within the viewport */
+            background-size: cover; /* Ensures the image covers the entire viewport */
             background-position: center; /* Centers the image */
             background-repeat: no-repeat; /* Prevents the image from repeating */
             background-attachment: fixed; /* Adds a parallax effect */
@@ -18,7 +18,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh; /* Ensures full height on smaller screens */
             margin: 0;
         }
         h1 {
@@ -34,10 +34,11 @@
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 5px;
-            width: 400px;
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Sets a max width for larger screens */
         }
         #messageInput {
-            width: 80%;
+            width: calc(100% - 30px); /* Adjusts width relative to its parent */
             padding: 10px;
             margin-right: 10px;
         }
@@ -49,6 +50,7 @@
             display: flex;
             justify-content: center;
             gap: 10px; /* Space between buttons */
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
         }
     </style>
 </head>
