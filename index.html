@@ -3,153 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple RPG Platform</title>
+    <title>Chat Application</title>
     <style>
-        body {
-            font-family: Arial, sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg'); /* Background image */
-            background-size: cover; /* Cover the entire background */
-            background-position: center; /* Center the image */
-            color: white; /* Change text color to white for better contrast */
+        #chatBox {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
         }
-        .container { 
-            max-width: 800px; 
-            margin: auto; 
-            position: relative; 
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for readability */
-            padding: 20px;
-            border-radius: 10px; /* Rounded corners */
+        #messageInput {
+            width: 80%;
         }
-        input, textarea, button { 
-            display: block; 
-            margin-bottom: 10px; 
-            width: 100%; 
-            padding: 8px; 
-            border-radius: 5px; /* Rounded corners for inputs */
-        }
-        .chat-box { 
-            border: 1px solid #ccc; 
-            height: 200px; 
-            overflow-y: scroll; 
-            padding: 10px; 
-            background-color: rgba(255, 255, 255, 0.9); /* Light background for chat */
-        }
-        .message { 
-            margin-bottom: 5px; 
-        }
-        .username { 
-            font-weight: bold; 
-        }
-        .clear-chat-button { 
-            position: absolute; 
-            top: 90px; 
-            right: 10px; 
-            padding: 5px 10px; 
-            font-size: 14px; 
-            background-color: #007BFF; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            width: 120px; 
-            text-align: center; 
-        }
-        .clear-chat-button:hover {
-            background-color: #0056b3; 
-        }
-        h2 { 
-            margin-top: 70px; 
-        } 
     </style>
-    <script type="module">
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
-            authDomain: "index-d3482.firebaseapp.com",
-            projectId: "index-d3482",
-            storageBucket: "index-d3482.firebasestorage.app",
-            messagingSenderId: "766904853047",
-            appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
-            measurementId: "G-PSTV5VW1ZW"
-        };
-
-        // Import Firebase and Firestore
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js';
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js';
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // Get Firestore instance
-
-        // Chat functions
-        async function sendMessage() {
-            const usernameInput = document.getElementById('usernameInput');
-            const messageInput = document.getElementById('chatInput');
-            if (usernameInput.value !== '' && messageInput.value !== '') {
-                try {
-                    await addDoc(collection(db, 'chat'), {
-                        username: usernameInput.value,
-                        message: messageInput.value,
-                        timestamp: Date.now()
-                    });
-                    messageInput.value = ''; // Clear message input after sending
-                } catch (error) {
-                    console.error("Error adding document: ", error);
-                }
-            }
-        }
-
-        // Clear chat log function
-        async function clearChat() {
-            const chatCollection = collection(db, 'chat');
-            const snapshot = await getDocs(chatCollection);
-            const deletePromises = snapshot.docs.map(doc => deleteDoc(doc.ref));
-            await Promise.all(deletePromises);
-        }
-
-        // Listen for new messages and order by timestamp
-        onSnapshot(query(collection(db, 'chat'), orderBy('timestamp')), (snapshot) => {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; // Clear chat box to avoid duplicates
-
-            snapshot.forEach((doc) => {
-                const messageData = doc.data();
-                const messageDiv = document.createElement('div');
-                messageDiv.className = 'message';
-                messageDiv.innerHTML = `<span class="username">${messageData.username}: </span>${messageData.message}`;
-                chatBox.appendChild(messageDiv);
-            });
-
-            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to bottom
-        });
-
-        // Add event listener for the Enter key to send messages
-        document.addEventListener('DOMContentLoaded', () => {
-            const messageInput = document.getElementById('chatInput');
-            messageInput.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent the default action (like adding a new line)
-                    sendMessage(); // Call the sendMessage function
-                }
-            });
-        });
-
-        // Expose functions to the global scope
-        window.sendMessage = sendMessage;
-        window.clearChat = clearChat;
-    </script>
+    <!-- Corrected UMD script imports -->
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.28.0/date-fns.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns-tz@1.1.7/date-fns-tz.umd.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Simple RPG Platform</h1>
-        <h2>Chat</h2>
-        <button class="clear-chat-button" onclick="clearChat()">Clear Chat</button>
-        <div class="chat-box" id="chatBox"></div>
-        <input type="text" id="usernameInput" placeholder="Your name...">
-        <input type="text" id="chatInput" placeholder="Type a message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+
+<div id="chatBox"></div>
+<input type="text" id="messageInput" placeholder="Type your message...">
+<button id="sendMessage">Send</button>
+
+<script>
+    // Sample messages array
+    let messages = [
+        { sender: 'krad', content: 'oh yea', timestamp: 1698889381 },
+        { sender: 'krad', content: 'lets take a trip', timestamp: 1698889386 },
+        { sender: 'krad', content: 'nono', timestamp: 1698889390 },
+        { sender: 'kai', content: 'yippiii', timestamp: 1698889469 },
+        { sender: 'kai', content: 'yeah', timestamp: 1698889474 },
+    ];
+
+    // Function to format the UTC timestamp to Malaysian time
+    function formatTimestamp(utcTimestamp) {
+        const date = new Date(utcTimestamp * 1000); // Convert to milliseconds
+        return window.dateFnsTz.format(date, 'dd/MM/yyyy, hh:mm:ss a', {
+            timeZone: 'Asia/Kuala_Lumpur'
+        });
+    }
+
+    // Function to render chat messages
+    function renderMessages() {
+        const chatBox = document.getElementById('chatBox');
+        chatBox.innerHTML = ''; // Clear existing messages
+
+        messages.sort((a, b) => a.timestamp - b.timestamp);
+
+        messages.forEach(message => {
+            const messageElement = document.createElement('div');
+            messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+            chatBox.appendChild(messageElement);
+        });
+
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+    }
+
+    // Send message function
+    document.getElementById('sendMessage').addEventListener('click', () => {
+        const messageInput = document.getElementById('messageInput');
+        if (messageInput.value.trim() !== '') {
+            const newMessage = {
+                sender: 'You',
+                content: messageInput.value,
+                timestamp: Math.floor(Date.now() / 1000)
+            };
+            messages.push(newMessage);
+            messageInput.value = ''; // Clear input field
+            renderMessages(); // Re-render messages
+        }
+    });
+
+    // Initial render of messages
+    renderMessages();
+</script>
+
 </body>
 </html>
