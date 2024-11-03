@@ -62,7 +62,7 @@
 
         messages.forEach(message => {
             const messageElement = document.createElement('div');
-            messageElement.innerHTML = ${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)};
+            messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
             chatBox.appendChild(messageElement);
         });
 
