@@ -40,13 +40,13 @@
         }
         #messageInput {
             width: calc(100% - 30px);
-            max-width: 350px; 
+            max-width: 350px;
             padding: 10px;
             margin-right: 10px;
-            border-radius: 5px; 
-            border: 1px solid #ccc; 
-            background-color: rgba(255, 255, 255, 0.8); 
-            color: black; 
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
         }
         #sendMessage, #clearChat, #biodataButton, .locationButton {
             padding: 10px 15px;
@@ -121,7 +121,7 @@
         }
 
         // Function to send a message
-        window.sendMessage = async function() { // Add window. to make it global
+        window.sendMessage = async function() {
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
@@ -143,7 +143,7 @@
         };
 
         // Function to clear chat
-        window.clearChat = async function() { // Add window. to make it global
+        window.clearChat = async function() {
             const confirmClear = confirm("Are you sure you want to clear the chat?");
             if (confirmClear) {
                 const messagesRef = collection(db, "messages");
@@ -156,8 +156,13 @@
 
         // Function to navigate to another page directly
         function navigateTo(url) {
-            console.log("Navigating to:", url); // Debugging: log the URL
-            window.location.href = url; // Navigate immediately
+            try {
+                console.log("Navigating to:", url); // Debugging: log the URL
+                window.location.href = url; // Navigate immediately
+            } catch (error) {
+                console.error("Navigation failed:", error);
+                alert("Failed to navigate to the specified page. Please check the path and try again.");
+            }
         }
 
         // Load messages and render them
