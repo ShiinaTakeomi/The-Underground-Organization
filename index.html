@@ -61,17 +61,16 @@
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
             authDomain: "index-d3482.firebaseapp.com",
             projectId: "index-d3482",
-            storageBucket: "index-d3482.firebasestorage.app",
+            storageBucket: "index-d3482.appspot.com",
             messagingSenderId: "766904853047",
             appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        // Import the Firebase modules
+        // Initialize Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
 
@@ -88,8 +87,8 @@
         async function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "messages"); // Access the messages collection
-            const q = query(messagesRef, orderBy("timestamp")); // Query to order messages by timestamp
+            const messagesRef = collection(db, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 const message = doc.data();
@@ -110,7 +109,7 @@
                     timestamp: Math.floor(Date.now() / 1000)
                 };
                 // Add message to Firestore
-                await addDoc(collection(db, "messages"), newMessage); // Add message to the messages collection
+                await addDoc(collection(db, "messages"), newMessage);
                 messageInput.value = ''; // Clear input field
                 renderMessages(); // Refresh message display
             } else {
