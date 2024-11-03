@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abandoned Warehouse - The Underground Organization</title>
+    <title>Main Page - The Underground Organization</title>
     <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
@@ -104,7 +104,7 @@
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Use a separate collection for the abandoned warehouse
+            const messagesRef = collection(db, "messages"); // Use a separate collection for messages
             const q = query(messagesRef, orderBy("timestamp"));
 
             // Use onSnapshot for real-time updates
@@ -131,7 +131,7 @@
                 };
                 // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
+                    await addDoc(collection(db, "messages"), newMessage); // Add to the new collection
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
@@ -146,7 +146,7 @@
         window.clearChat = async function() { // Add window. to make it global
             const confirmClear = confirm("Are you sure you want to clear the chat?");
             if (confirmClear) {
-                const messagesRef = collection(db, "abandoned_warehouse_messages");
+                const messagesRef = collection(db, "messages");
                 const messagesSnapshot = await getDocs(messagesRef);
                 messagesSnapshot.forEach(async (doc) => {
                     await deleteDoc(doc.ref);
@@ -179,14 +179,14 @@
 </head>
 <body>
 
-<h1>Abandoned Warehouse</h1>
+<h1>Main Page - The Underground Organization</h1>
 <div id="chatBox" role="log" aria-live="polite"></div>
 <input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()" aria-label="Send message">Send</button>
     <button id="clearChat" onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
     <button id="biodataButton" onclick="navigateTo('biodata.html')" aria-label="View biodata">Biodata</button>
-    <button onclick="navigateTo('index.html')" aria-label="Back to main page">Back to Main</button> <!-- Button to return to the main page -->
+    <button onclick="navigateTo('index.html')" aria-label="Refresh page">Refresh Page</button> <!-- Button to refresh the page -->
 </div>
 
 </body>
