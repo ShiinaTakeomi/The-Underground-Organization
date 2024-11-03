@@ -3,31 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Chat Application</title>
+    <title>Chat Application</title>
+    <style>
+        body {
+            background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg');
+            background-size: cover; /* Cover the entire screen */
+            color: white; /* Text color for readability */
+            font-family: Arial, sans-serif; /* Font styling */
+            display: flex;
+            justify-content: center; /* Center the chat box */
+            align-items: center; /* Center the chat box vertically */
+            height: 100vh; /* Full height */
+            margin: 0; /* Remove default margin */
+        }
+        #chatContainer {
+            width: 400px; /* Fixed width for the chat box */
+            display: flex;
+            flex-direction: column;
+        }
+        #chatBox {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: scroll;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background for chat box */
+            border-radius: 5px; /* Rounded corners */
+            flex-grow: 1; /* Allow chat box to grow */
+        }
+        #messageInput {
+            width: 80%;
+            padding: 10px; /* Padding for the input field */
+            margin-right: 10px; /* Space between input and button */
+        }
+        #sendMessage {
+            padding: 10px 15px; /* Padding for the send button */
+        }
+        .message {
+            margin-bottom: 10px; /* Space between messages */
+        }
+        .sender {
+            color: lightblue; /* Color for sender's name */
+            font-weight: bold; /* Bold for sender's name */
+        }
+        .friend {
+            color: lightgreen; /* Color for friend's messages */
+            font-weight: bold; /* Bold for friend's messages */
+        }
+    </style>
 </head>
 <body>
 
-<div id="chatBox"></div>
-<input type="text" id="messageInput" placeholder="Type your message...">
-<button id="sendMessage">Send</button>
+<div id="chatContainer">
+    <div id="chatBox"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button id="sendMessage">Send</button>
+</div>
 
 <script>
     // Sample messages array
     let messages = [
-        { sender: 'krad', content: 'oh yea', timestamp: Date.now() / 1000 },
-        { sender: 'kai', content: 'yippiii', timestamp: Date.now() / 1000 },
+        { sender: 'Krad', content: 'oh yea', timestamp: 1698889381 },
+        { sender: 'Kai', content: 'yippiii', timestamp: 1698889469 },
     ];
+
+    // Function to format the UTC timestamp to local time
+    function formatTimestamp(utcTimestamp) {
+        const date = new Date(utcTimestamp * 1000); // Convert to milliseconds
+        return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' }); // Format to Malaysian time
+    }
 
     // Function to render chat messages
     function renderMessages() {
         const chatBox = document.getElementById('chatBox');
         chatBox.innerHTML = ''; // Clear existing messages
 
+        // Sort messages by timestamp in UTC
+        messages.sort((a, b) => a.timestamp - b.timestamp);
+
         messages.forEach(message => {
             const messageElement = document.createElement('div');
-            messageElement.textContent = `${message.sender}: ${message.content}`;
+            messageElement.classList.add('message');
+            const senderClass = message.sender === 'You' ? 'sender' : 'friend'; // Differentiate sender
+            messageElement.innerHTML = `<span class="${senderClass}">${message.sender}</span>: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
             chatBox.appendChild(messageElement);
         });
+
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
     }
 
     // Send message function
@@ -35,7 +97,7 @@
         const messageInput = document.getElementById('messageInput');
         if (messageInput.value.trim() !== '') {
             const newMessage = {
-                sender: 'You', // Replace with actual sender
+                sender: 'You', // Replace with actual sender's name
                 content: messageInput.value,
                 timestamp: Math.floor(Date.now() / 1000) // Current time in seconds
             };
