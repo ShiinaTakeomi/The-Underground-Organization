@@ -67,19 +67,20 @@
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        // Initialize Firebase
+        // Import Firebase and Firestore
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app); // Initialize Firestore
 
-        // Variables
+        // Your chat functionality here
         let character = JSON.parse(localStorage.getItem('character')) || { name: 'You' }; // Default character name
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
-            const date = new Date(utcTimestamp * 1000);
+            const date = new Date(utcTimestamp);
             return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
         }
 
@@ -106,7 +107,7 @@
                 const newMessage = {
                     sender: character.name,
                     content: messageInput.value,
-                    timestamp: Math.floor(Date.now() / 1000)
+                    timestamp: Date.now() // Use current timestamp in milliseconds
                 };
                 // Add message to Firestore
                 await addDoc(collection(db, "messages"), newMessage);
