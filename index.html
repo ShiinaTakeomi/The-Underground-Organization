@@ -102,7 +102,7 @@
     async function renderMessages() {
         const chatBox = document.getElementById('chatBox');
         chatBox.innerHTML = ''; // Clear chat box
-        const querySnapshot = await db.collection("messages").orderBy("timestamp").get();
+        const querySnapshot = await db.collection("chat").orderBy("timestamp").get(); // Changed 'messages' to 'chat'
         querySnapshot.forEach((doc) => {
             const message = doc.data();
             const messageElement = document.createElement('div');
@@ -122,7 +122,7 @@
                 timestamp: Math.floor(Date.now() / 1000)
             };
             // Add message to Firestore
-            await db.collection("messages").add(newMessage);
+            await db.collection("chat").add(newMessage); // Changed 'messages' to 'chat'
             messageInput.value = ''; // Clear input field
             renderMessages(); // Refresh message display
         } else {
