@@ -101,7 +101,7 @@
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "messages"); // Use a separate collection for messages
+            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Separate collection for abandoned warehouse messages
             const q = query(messagesRef, orderBy("timestamp"));
 
             // Use onSnapshot for real-time updates
@@ -128,7 +128,7 @@
                 };
                 // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "messages"), newMessage); // Add to the new collection
+                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
                     messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
@@ -143,7 +143,7 @@
         window.clearChat = async function() {
             const confirmClear = confirm("Are you sure you want to clear the chat?");
             if (confirmClear) {
-                const messagesRef = collection(db, "messages");
+                const messagesRef = collection(db, "abandoned_warehouse_messages");
                 const messagesSnapshot = await getDocs(messagesRef);
                 messagesSnapshot.forEach(async (doc) => {
                     await deleteDoc(doc.ref);
