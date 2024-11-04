@@ -30,7 +30,7 @@
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
-            overflow-y: scroll;
+            overflow-y: auto; /* Changed from scroll to auto for better usability */
             padding: 10px;
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
@@ -70,12 +70,12 @@
         /* New Navigation Section Styles */
         .navigation-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
+            justify-content: center; /* Center the navigation buttons */
+            gap: 10px; /* Space between buttons */
+            margin-top: 10px; /* Adjust margin */
         }
         .navigation-button {
-            margin: 5px 0; /* Space between buttons */
+            margin: 0; /* Remove margin for navigation buttons */
         }
     </style>
     <!-- Firebase SDKs -->
@@ -187,13 +187,11 @@
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()" aria-label="Send message">Send</button>
     <button id="clearChat" onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
+    <button id="biodataButton" onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
 </div>
 
 <!-- New Navigation Section -->
 <div class="navigation-container">
-    <div class="navigation-button">
-        <button id="biodataButton" onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
-    </div>
     <div class="navigation-button">
         <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'" aria-label="Go to Abandoned Warehouse">Abandoned Warehouse</button>
     </div>
