@@ -15,8 +15,8 @@
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: row; /* Changed to row for layout */
-            align-items: flex-start; /* Align items to the top */
+            flex-direction: column; /* Changed to column for better responsiveness */
+            align-items: center; /* Center items horizontally */
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
@@ -37,7 +37,6 @@
             border-radius: 5px;
             width: 90%;
             max-width: 400px;
-            flex: 1; /* Allow chat box to grow */
         }
         #messageInput {
             width: calc(100% - 30px);
@@ -211,17 +210,20 @@
     </script>
 </head>
 <body>
-    <h1>The Underground Organization</h1>
     <div class="navigation-container">
-        <button id="biodataButton" onclick="window.location.href='biodata.html';">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html';">Abandoned Warehouse</button>
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
     </div>
+
+    <h1>Welcome to The Underground Organization</h1>
     <div id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="Type your message...">
+    
+    <input type="text" id="messageInput" placeholder="Type your message here..." />
     <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="sendMessage" onclick="sendMessage()">Send Message</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
     </div>
-    <div id="biodataBox"></div> <!-- New biodata box -->
+    
+    <div id="biodataBox"></div> <!-- Biodata box for displaying character info -->
 </body>
 </html>
