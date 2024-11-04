@@ -15,9 +15,8 @@
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            flex-direction: row; /* Changed to row for layout */
+            align-items: flex-start; /* Align items to the top */
             min-height: 100vh;
             margin: 0;
             overflow: hidden;
@@ -26,6 +25,7 @@
             text-align: center;
             color: white;
             margin-bottom: 20px;
+            width: 100%; /* Full width for centering */
         }
         #chatBox {
             border: 1px solid #ccc;
@@ -37,6 +37,7 @@
             border-radius: 5px;
             width: 90%;
             max-width: 400px;
+            flex: 1; /* Allow chat box to grow */
         }
         #messageInput {
             width: calc(100% - 30px);
@@ -78,8 +79,16 @@
             top: 10px; /* Aligns it to the top */
             left: 10px; /* Aligns it to the left */
         }
-        .navigation-button {
-            margin: 0; /* Remove margin for navigation buttons */
+        /* Biodata Box Styles */
+        #biodataBox {
+            border: 1px solid #ccc;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 300px; /* Fixed width for biodata box */
+            height: 400px; /* Fixed height for biodata box */
+            overflow-y: auto; /* Enable scrolling */
+            padding: 10px;
+            margin-left: 20px; /* Space between chat and biodata box */
         }
     </style>
     <!-- Firebase SDKs -->
@@ -180,27 +189,39 @@
                     sendMessage(); // Call sendMessage function
                 }
             });
+            
+            // Load biodata and display it
+            const biodataBox = document.getElementById('biodataBox');
+            if (character) {
+                biodataBox.innerHTML = `
+                    <h2>Biodata</h2>
+                    <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
+                    <strong>Age:</strong> ${character.age || 'N/A'}<br>
+                    <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
+                    <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
+                    <strong>Height:</strong> ${character.height || 'N/A'}<br>
+                    <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
+                    <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
+                    <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
+                    <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
+                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}<br>
+                `;
+            }
         };
     </script>
 </head>
 <body>
-
-<h1>The Underground Organization</h1>
-<div id="chatBox" role="log" aria-live="polite"></div>
-<input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
-<div class="button-container">
-    <button id="sendMessage" onclick="sendMessage()" aria-label="Send message">Send</button>
-    <button id="clearChat" onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button id="biodataButton" onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
-</div>
-
-<!-- New Navigation Section -->
-<div class="navigation-container">
-    <div class="navigation-button">
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'" aria-label="Go to Abandoned Warehouse">Abandoned Warehouse</button>
+    <h1>The Underground Organization</h1>
+    <div class="navigation-container">
+        <button id="biodataButton" onclick="window.location.href='biodata.html';">Biodata</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html';">Abandoned Warehouse</button>
     </div>
-    <!-- Future roleplay location buttons can be added here -->
-</div>
-
+    <div id="chatBox"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <div class="button-container">
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+    </div>
+    <div id="biodataBox"></div> <!-- New biodata box -->
 </body>
 </html>
