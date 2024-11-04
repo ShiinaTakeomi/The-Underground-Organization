@@ -15,22 +15,22 @@
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column; /* Changed to column for better responsiveness */
-            align-items: center; /* Center items horizontally */
+            flex-direction: column;
+            align-items: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding-bottom: 20px; /* Add some padding at the bottom */
         }
         h1 {
             text-align: center;
             color: white;
             margin-bottom: 20px;
-            width: 100%; /* Full width for centering */
+            width: 100%;
         }
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
-            overflow-y: auto; /* Changed from scroll to auto for better usability */
+            overflow-y: auto; /* Enable scrolling */
             padding: 10px;
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
@@ -67,30 +67,28 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        /* New Navigation Section Styles */
         .navigation-container {
             display: flex;
-            justify-content: flex-start; /* Align buttons to the left */
-            gap: 10px; /* Space between buttons */
-            margin-top: 10px; /* Adjust margin */
-            width: 100%; /* Full width for proper alignment */
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
             position: absolute; /* Positioning */
             top: 10px; /* Aligns it to the top */
-            left: 10px; /* Aligns it to the left */
         }
-        /* Biodata Box Styles */
         #biodataBox {
             border: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 5px;
-            width: 300px; /* Fixed width for biodata box */
-            height: 400px; /* Fixed height for biodata box */
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Max width for larger screens */
+            height: auto; /* Height auto to fit content */
+            max-height: 400px; /* Set max height for scrolling */
             overflow-y: auto; /* Enable scrolling */
             padding: 10px;
-            margin-left: 20px; /* Space between chat and biodata box */
+            margin-top: 20px; /* Space between chat and biodata box */
         }
     </style>
-    <!-- Firebase SDKs -->
     <script type="module">
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -108,13 +106,13 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // Initialize Firestore
+        const db = getFirestore(app);
 
         // Load character data from localStorage
-        let character = JSON.parse(localStorage.getItem('character')) || {}; // Default to empty object
+        let character = JSON.parse(localStorage.getItem('character')) || {};
 
         // Update character name to use aliasName from biodata or default to 'Anonymous'
-        const characterName = character.aliasName ? character.aliasName : 'Anonymous'; // Use aliasName or default to 'Anonymous'
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
@@ -125,13 +123,12 @@
         // Function to render messages from Firestore
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "messages"); // Use a separate collection for messages
+            chatBox.innerHTML = '';
+            const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
-            // Use onSnapshot for real-time updates
             onSnapshot(q, (querySnapshot) => {
-                chatBox.innerHTML = ''; // Clear chat box on each update
+                chatBox.innerHTML = '';
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
@@ -147,20 +144,19 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: characterName, // Use the character name
+                    sender: characterName,
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
-                // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "messages"), newMessage); // Add to the new collection
-                    messageInput.value = ''; // Clear input field
+                    await addDoc(collection(db, "messages"), newMessage);
+                    messageInput.value = '';
                 } catch (error) {
                     console.error("Error sending message: ", error);
-                    alert("Failed to send message. Please try again."); // Alert for failed message send
+                    alert("Failed to send message. Please try again.");
                 }
             } else {
-                alert("Please enter a message."); // Alert for empty message
+                alert("Please enter a message.");
             }
         };
 
@@ -178,17 +174,16 @@
 
         // Load messages and render them
         window.onload = function() {
-            renderMessages(); // Call to render messages
+            renderMessages();
 
-            // Add event listener for the Enter key
             const messageInput = document.getElementById('messageInput');
             messageInput.addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent the default action (form submission)
-                    sendMessage(); // Call sendMessage function
+                    event.preventDefault();
+                    sendMessage();
                 }
             });
-            
+
             // Load biodata and display it
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
@@ -203,27 +198,24 @@
                     <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
                     <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
                     <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
-                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}<br>
+                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
                 `;
             }
         };
     </script>
 </head>
 <body>
-    <div class="navigation-container">
-        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
-    </div>
-
     <h1>Welcome to The Underground Organization</h1>
     <div id="chatBox"></div>
-    
-    <input type="text" id="messageInput" placeholder="Type your message here..." />
+    <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send Message</button>
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
     </div>
-    
-    <div id="biodataBox"></div> <!-- Biodata box for displaying character info -->
+    <div class="navigation-container">
+        <button id="biodataButton" onclick="document.getElementById('biodataBox').style.display = 'block';">Biodata</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html';">Abandoned Warehouse</button>
+    </div>
+    <div id="biodataBox" style="display:none;"></div> <!-- Biodata box initially hidden -->
 </body>
 </html>
