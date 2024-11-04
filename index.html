@@ -48,7 +48,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
-        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton {
+        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton {
             padding: 10px 15px;
             margin-top: 10px;
             cursor: pointer;
@@ -58,7 +58,7 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover {
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
         .button-container {
@@ -69,12 +69,10 @@
         }
         .navigation-container {
             display: flex;
-            justify-content: center;
+            justify-content: flex-start; /* Align buttons to the left */
             gap: 10px;
             margin-top: 10px;
             width: 100%;
-            position: absolute; /* Positioning */
-            top: 10px; /* Aligns it to the top */
         }
         #biodataBox {
             border: 1px solid #ccc;
@@ -201,21 +199,27 @@
                     <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
                 `;
             }
+
+            // Function to display biodata
+            document.getElementById('viewBiodataButton').onclick = function() {
+                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            };
         };
     </script>
 </head>
 <body>
-    <h1>Welcome to The Underground Organization</h1>
+    <h1>The Underground Organization</h1>
     <div id="chatBox"></div>
     <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="viewBiodataButton">View Biodata</button>
     </div>
     <div class="navigation-container">
-        <button id="biodataButton" onclick="document.getElementById('biodataBox').style.display = 'block';">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html';">Abandoned Warehouse</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
     </div>
-    <div id="biodataBox" style="display:none;"></div> <!-- Biodata box initially hidden -->
+    <div id="biodataBox" style="display:none;"></div>
 </body>
 </html>
