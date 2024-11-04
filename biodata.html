@@ -104,7 +104,7 @@
 </form>
 
 <div class="button-container">
-    <button onclick="navigateTo('index.html')">Back to Main Page</button>
+    <button onclick="window.location.href='index.html'">Back to Main Page</button>
 </div>
 
 <script>
@@ -122,11 +122,6 @@
     document.getElementById('appearance').value = character.appearance || '';
     document.getElementById('personality').value = character.personality || '';
     document.getElementById('hobbies').value = character.hobbies || '';
-
-    // Function to navigate to another page
-    function navigateTo(url) {
-        window.location.href = url;
-    }
 
     // Handle form submission
     document.getElementById('biodataForm').onsubmit = function(event) {
@@ -149,7 +144,7 @@
         // Save to localStorage
         localStorage.setItem('character', JSON.stringify(formData));
         alert('Biodata saved successfully!');
-        navigateTo('index.html'); // Redirect back to the main page
+        window.location.href = 'index.html'; // Redirect back to the main page
     };
 </script>
 
