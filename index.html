@@ -67,6 +67,16 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+        /* New Navigation Section Styles */
+        .navigation-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .navigation-button {
+            margin: 5px 0; /* Space between buttons */
+        }
     </style>
     <!-- Firebase SDKs -->
     <script type="module">
@@ -177,8 +187,17 @@
 <div class="button-container">
     <button id="sendMessage" onclick="sendMessage()" aria-label="Send message">Send</button>
     <button id="clearChat" onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button id="biodataButton" onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
-    <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'" aria-label="Go to Abandoned Warehouse">Abandoned Warehouse</button>
+</div>
+
+<!-- New Navigation Section -->
+<div class="navigation-container">
+    <div class="navigation-button">
+        <button id="biodataButton" onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
+    </div>
+    <div class="navigation-button">
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'" aria-label="Go to Abandoned Warehouse">Abandoned Warehouse</button>
+    </div>
+    <!-- Future roleplay location buttons can be added here -->
 </div>
 
 </body>
