@@ -48,87 +48,78 @@
         }
         button {
             padding: 10px 15px;
+            cursor: pointer;
             background-color: rgba(0, 0, 0, 0.8);
             color: white;
             border: none;
             border-radius: 5px;
-            cursor: pointer;
             transition: background-color 0.3s;
+            width: 100%;
         }
         button:hover {
             background-color: rgba(255, 255, 255, 0.2);
-        }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 20px;
         }
     </style>
 </head>
 <body>
 
-<h1>Biodata</h1>
+<h1>Biodata - The Underground Organization</h1>
 <form id="biodataForm">
     <label for="aliasName">Alias Name:</label>
     <input type="text" id="aliasName" name="aliasName" required>
     
     <label for="age">Age:</label>
     <input type="number" id="age" name="age" required>
-    
+
     <label for="gender">Gender:</label>
     <input type="text" id="gender" name="gender" required>
-    
+
     <label for="sexuality">Sexuality:</label>
-    <input type="text" id="sexuality" name="sexuality" required>
-    
+    <input type="text" id="sexuality" name="sexuality">
+
     <label for="height">Height:</label>
-    <input type="text" id="height" name="height" required>
-    
+    <input type="text" id="height" name="height">
+
     <label for="weight">Weight:</label>
-    <input type="text" id="weight" name="weight" required>
-    
+    <input type="text" id="weight" name="weight">
+
     <label for="bodyType">Body Type:</label>
-    <input type="text" id="bodyType" name="bodyType" required>
-    
+    <input type="text" id="bodyType" name="bodyType">
+
     <label for="appearance">Appearance:</label>
-    <textarea id="appearance" name="appearance" rows="4" required></textarea>
-    
+    <textarea id="appearance" name="appearance" rows="4"></textarea>
+
     <label for="personality">Personality:</label>
-    <textarea id="personality" name="personality" rows="4" required></textarea>
-    
+    <textarea id="personality" name="personality" rows="4"></textarea>
+
     <label for="hobbies">Hobbies:</label>
     <textarea id="hobbies" name="hobbies" rows="4"></textarea>
-    
+
     <button type="submit">Save Biodata</button>
 </form>
 
-<div class="button-container">
-    <button onclick="window.location.href='index.html'">Back to Main Page</button>
-</div>
-
 <script>
     // Load character data from localStorage
-    let character = JSON.parse(localStorage.getItem('character')) || {};
+    const character = JSON.parse(localStorage.getItem('character')) || {};
 
-    // Populate form fields with character data
-    document.getElementById('aliasName').value = character.aliasName || '';
-    document.getElementById('age').value = character.age || '';
-    document.getElementById('gender').value = character.gender || '';
-    document.getElementById('sexuality').value = character.sexuality || '';
-    document.getElementById('height').value = character.height || '';
-    document.getElementById('weight').value = character.weight || '';
-    document.getElementById('bodyType').value = character.bodyType || '';
-    document.getElementById('appearance').value = character.appearance || '';
-    document.getElementById('personality').value = character.personality || '';
-    document.getElementById('hobbies').value = character.hobbies || '';
+    // Populate form fields if character data exists
+    if (character) {
+        document.getElementById('aliasName').value = character.aliasName || '';
+        document.getElementById('age').value = character.age || '';
+        document.getElementById('gender').value = character.gender || '';
+        document.getElementById('sexuality').value = character.sexuality || '';
+        document.getElementById('height').value = character.height || '';
+        document.getElementById('weight').value = character.weight || '';
+        document.getElementById('bodyType').value = character.bodyType || '';
+        document.getElementById('appearance').value = character.appearance || '';
+        document.getElementById('personality').value = character.personality || '';
+        document.getElementById('hobbies').value = character.hobbies || '';
+    }
 
     // Handle form submission
     document.getElementById('biodataForm').onsubmit = function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        // Gather data from the form
-        const formData = {
+        event.preventDefault(); // Prevent form submission
+        const biodata = {
             aliasName: document.getElementById('aliasName').value,
             age: document.getElementById('age').value,
             gender: document.getElementById('gender').value,
@@ -141,10 +132,9 @@
             hobbies: document.getElementById('hobbies').value,
         };
 
-        // Save to localStorage
-        localStorage.setItem('character', JSON.stringify(formData));
-        alert('Biodata saved successfully!');
-        window.location.href = 'index.html'; // Redirect back to the main page
+        // Save biodata to localStorage
+        localStorage.setItem('character', JSON.stringify(biodata));
+        alert("Biodata saved successfully!");
     };
 </script>
 
