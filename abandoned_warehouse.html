@@ -129,7 +129,7 @@
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
-                    messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+                    messageElement.innerHTML = ${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}; 
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
@@ -184,7 +184,7 @@
             // Load biodata and display it
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
-                biodataBox.innerHTML = ` 
+                biodataBox.innerHTML =  
                     <h2>Biodata</h2>
                     <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
                     <strong>Age:</strong> ${character.age || 'N/A'}<br>
@@ -196,7 +196,7 @@
                     <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
                     <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
                     <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
-                `;
+                ;
             }
 
             // Function to display biodata
@@ -213,11 +213,12 @@
     <div class="button-container">
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button> <!-- New Biodata Button -->
     </div>
     <div class="navigation-container">
-        <button id="viewBiodataButton">View Biodata</button>
-        <button onclick="window.history.back();">Return</button>
+        <button id="viewBiodataButton">View Biodata</button> <!-- View Biodata Button -->
+        <button id="returnButton" onclick="window.location.href='index.html'">Return</button> <!-- Return Button -->
     </div>
-    <div id="biodataBox"></div> <!-- Biodata display box -->
+    <div id="biodataBox"></div> <!-- Biodata Box -->
 </body>
 </html>
