@@ -118,14 +118,6 @@
             return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
         }
 
-        // Notification Sound
-        const notificationSound = new Audio('https://drive.google.com/uc?export=download&id=1F2jORpyd1VQPsQBLeMaDBr1hAG7RDgDL'); // Direct link to the sound
-
-        // Function to play notification sound
-        function playNotificationSound() {
-            notificationSound.play();
-        }
-
         // Function to render messages from Firestore
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
@@ -142,7 +134,6 @@
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
-                playNotificationSound(); // Play sound when a new message is received
             });
         }
 
@@ -194,7 +185,7 @@
             // Load biodata and display it
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
-                biodataBox.innerHTML = ` 
+                biodataBox.innerHTML = `
                     <h2>Biodata</h2>
                     <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
                     <strong>Age:</strong> ${character.age || 'N/A'}<br>
@@ -218,23 +209,19 @@
 </head>
 <body>
     <h1>The Underground Organization</h1>
-
     <div id="chatBox"></div>
-
+    <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
-        <input type="text" id="messageInput" placeholder="Type a message...">
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="biodataButton">Biodata</button>
     </div>
-
     <div class="navigation-container">
-        <button id="biodataButton">View Biodata</button>
-        <button id="abandonedWarehouseButton">Abandoned Warehouse</button>
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+        <button id="viewBiodataButton">View Biodata</button>
     </div>
-
-    <div id="biodataBox" style="display: none;"></div>
-
     <button id="viewBiodataButton">View Biodata</button>
-
+    <div id="biodataBox" style="display: none;"></div>
 </body>
 </html>
