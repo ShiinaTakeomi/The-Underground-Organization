@@ -213,11 +213,20 @@
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
         <button onclick="window.location.href = 'biodata.html'">Biodata</button> <!-- New Biodata button -->
-        <button onclick="window.location.href = 'index.html'">Return</button> <!-- Return button -->
+        <button id="returnButton">Return</button> <!-- Return button -->
     </div>
-    <div class="navigation-container">
-        <button id="viewBiodataButton">View Biodata</button>
-    </div>
+    <script>
+        // Set the href of the return button to the referring page or fall back to 'index.html'
+        const returnButton = document.getElementById('returnButton');
+        const previousPage = document.referrer; // Get the referring URL
+
+        if (previousPage) {
+            returnButton.onclick = () => window.location.href = previousPage; // Navigate to the previous page
+        } else {
+            returnButton.onclick = () => window.location.href = 'index.html'; // Default to 'index.html'
+        }
+    </script>
+    <button id="viewBiodataButton">View Biodata</button> <!-- View Biodata button -->
     <div id="biodataBox"></div>
 </body>
 </html>
