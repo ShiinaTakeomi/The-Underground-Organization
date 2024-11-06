@@ -6,6 +6,7 @@
     <title>Abandoned Warehouse</title>
     <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
+        /* Existing styles (no changes here) */
         body {
             background-image: url('https://i.pinimg.com/564x/29/ca/8a/29ca8a09448c501efa0dce66f8786710.jpg');
             background-size: cover;
@@ -181,6 +182,12 @@
                 }
             });
 
+            // Store current page URL when "Biodata" button is clicked
+            const biodataButton = document.querySelector('button[onclick="window.location.href = \'biodata.html\'"]');
+            biodataButton.onclick = function() {
+                localStorage.setItem('previousPage', window.location.href); // Store current page URL
+            };
+
             // Load biodata and display it
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
@@ -198,9 +205,11 @@
                     <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}`;
             }
 
-            // Function to display biodata
-            document.getElementById('viewBiodataButton').onclick = function() {
-                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            // Handle the "Return" button
+            const returnButton = document.querySelector('#returnButton');
+            returnButton.onclick = function() {
+                const previousPage = localStorage.getItem('previousPage') || 'index.html'; // Default to index.html if no previous page
+                window.location.href = previousPage;
             };
         };
     </script>
@@ -208,25 +217,17 @@
 <body>
     <h1>Abandoned Warehouse</h1>
     <div id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button onclick="window.location.href = 'biodata.html'">Biodata</button> <!-- New Biodata button -->
-        <button id="returnButton">Return</button> <!-- Return button -->
+        <input type="text" id="messageInput" placeholder="Type a message...">
+        <button onclick="sendMessage()">Send</button>
     </div>
-    <script>
-        // Set the href of the return button to the referring page or fall back to 'index.html'
-        const returnButton = document.getElementById('returnButton');
-        const previousPage = document.referrer; // Get the referring URL
-
-        if (previousPage) {
-            returnButton.onclick = () => window.location.href = previousPage; // Navigate to the previous page
-        } else {
-            returnButton.onclick = () => window.location.href = 'index.html'; // Default to 'index.html'
-        }
-    </script>
-    <button id="viewBiodataButton">View Biodata</button> <!-- View Biodata button -->
+    <div class="navigation-container">
+        <button onclick="clearChat()">Clear Chat</button>
+        <button onclick="window.location.href = 'biodata.html'">Biodata</button>
+    </div>
+    <div class="navigation-container">
+        <button id="returnButton">Return</button>
+    </div>
     <div id="biodataBox"></div>
 </body>
 </html>
