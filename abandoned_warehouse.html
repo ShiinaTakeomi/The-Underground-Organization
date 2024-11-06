@@ -66,6 +66,18 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+        #biodataBox {
+            display: none; /* Initially hidden */
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            margin-top: 20px;
+            color: white;
+            font-size: 16px;
+            text-align: left;
+        }
     </style>
     <!-- Firebase SDKs -->
     <script type="module">
@@ -163,7 +175,8 @@
 
         // Function to view biodata
         window.viewBiodata = function() {
-            window.location.href = 'biodata.html'; // Navigate to biodata page
+            const biodataBox = document.getElementById('biodataBox');
+            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
         };
     </script>
 </head>
@@ -173,10 +186,18 @@
 <div id="chatBox" role="log" aria-live="polite"></div>
 <input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
 <div class="button-container">
+    <button onclick="window.location.href='biodata.html'" aria-label="Biodata">Biodata</button> <!-- Biodata button -->
     <button onclick="sendMessage()" aria-label="Send message">Send</button>
     <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button onclick="viewBiodata()" aria-label="View biodata">View Biodata</button> <!-- Updated button for biodata -->
+    <button onclick="viewBiodata()" aria-label="View biodata">View Biodata</button> <!-- View biodata button -->
     <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
+</div>
+
+<!-- Biodata box section -->
+<div id="biodataBox" aria-live="polite">
+    <h3>Biodata Information</h3>
+    <p>Alias Name: <strong id="aliasName"></strong></p>
+    <!-- You can add more biodata fields as needed -->
 </div>
 
 </body>
