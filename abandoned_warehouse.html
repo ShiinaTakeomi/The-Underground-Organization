@@ -215,17 +215,22 @@
         <button onclick="window.location.href = 'biodata.html'">Biodata</button> <!-- New Biodata button -->
         <button id="returnButton">Return</button> <!-- Return button -->
     </div>
-    <script>
-        // Set the href of the return button to the referring page or fall back to 'index.html'
-        const returnButton = document.getElementById('returnButton');
-        const previousPage = document.referrer; // Get the referring URL
+<script>
+    // Set the href of the return button to the referring page or fall back to 'index.html'
+    const returnButton = document.getElementById('returnButton');
+    const previousPage = document.referrer; // Get the referring URL
 
-        if (previousPage) {
-            returnButton.onclick = () => window.location.href = previousPage; // Navigate to the previous page
-        } else {
-            returnButton.onclick = () => window.location.href = 'index.html'; // Default to 'index.html'
-        }
-    </script>
+    // Check if the referring page is 'biodata.html'
+    if (previousPage.includes('biodata.html')) {
+        // If the previous page is 'biodata.html', go back to the previous page before it
+        returnButton.onclick = () => window.history.back(); // Go to the page before biodata.html
+    } else if (previousPage) {
+        // Otherwise, use the referring URL or fall back to 'index.html'
+        returnButton.onclick = () => window.location.href = previousPage;
+    } else {
+        returnButton.onclick = () => window.location.href = 'index.html'; // Default to 'index.html'
+    }
+</script>
     <button id="viewBiodataButton">View Biodata</button> <!-- View Biodata button -->
     <div id="biodataBox"></div>
 </body>
