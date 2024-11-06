@@ -186,11 +186,15 @@
 <div id="chatBox" role="log" aria-live="polite"></div>
 <input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
 <div class="button-container">
-    <button onclick="window.location.href='biodata.html'" aria-label="Biodata">Biodata</button> <!-- Biodata button -->
-    <button onclick="sendMessage()" aria-label="Send message">Send</button>
-    <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button onclick="viewBiodata()" aria-label="View biodata">View Biodata</button> <!-- View biodata button -->
-    <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+    </div>
+    <div class="navigation-container">
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+    </div>
+    <button id="viewBiodataButton">View Biodata</button>
+    <div id="biodataBox" style="display: none;"></div>
 </div>
 
 <!-- Biodata box section -->
