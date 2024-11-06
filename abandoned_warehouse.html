@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Underground Organization - Abandoned Warehouse</title>
-    <link rel="icon" href="data:,">
+    <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
             background-image: url('https://i.pinimg.com/564x/ba/52/45/ba5245cf77640f0dddf0e47c4811749f.jpg');
@@ -67,20 +67,28 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+        .navigation-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
         #biodataBox {
             border: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 5px;
             width: 90%;
             max-width: 400px;
+            height: auto;
             max-height: 400px;
             overflow-y: auto;
             padding: 10px;
             margin-top: 20px;
+            display: none;
         }
     </style>
     <script type="module">
-        // Your Firebase configuration and initialization
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
             authDomain: "index-d3482.firebaseapp.com",
@@ -157,33 +165,25 @@
         window.onload = function() {
             renderMessages();
 
-            const messageInput = document.getElementById('messageInput');
-            messageInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            const biodataBox = document.getElementById('biodataBox');
-            if (character) {
-                biodataBox.innerHTML = `
-                    <h2>Biodata</h2>
-                    <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
-                    <strong>Age:</strong> ${character.age || 'N/A'}<br>
-                    <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
-                    <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
-                    <strong>Height:</strong> ${character.height || 'N/A'}<br>
-                    <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
-                    <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
-                    <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
-                    <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
-                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
-                `;
-            }
-
             document.getElementById('viewBiodataButton').onclick = function() {
+                const biodataBox = document.getElementById('biodataBox');
                 biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+
+                if (biodataBox.innerHTML.trim() === '') {
+                    biodataBox.innerHTML = `
+                        <h2>Biodata</h2>
+                        <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
+                        <strong>Age:</strong> ${character.age || 'N/A'}<br>
+                        <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
+                        <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
+                        <strong>Height:</strong> ${character.height || 'N/A'}<br>
+                        <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
+                        <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
+                        <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
+                        <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
+                        <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
+                    `;
+                }
             };
         };
     </script>
@@ -196,8 +196,8 @@
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
         <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+        <button id="viewBiodataButton">View Biodata</button>
     </div>
-    <button id="viewBiodataButton">View Biodata</button>
-    <div id="biodataBox" style="display: none;"></div>
+    <div id="biodataBox"></div>
 </body>
 </html>
