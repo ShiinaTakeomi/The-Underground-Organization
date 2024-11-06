@@ -17,19 +17,20 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            padding-bottom: 20px; /* Add some padding at the bottom */
         }
         h1 {
             text-align: center;
+            color: white;
             margin-bottom: 20px;
+            width: 100%;
         }
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
-            overflow-y: scroll;
+            overflow-y: auto; /* Enable scrolling */
             padding: 10px;
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
@@ -47,7 +48,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
-        button {
+        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton {
             padding: 10px 15px;
             margin-top: 10px;
             cursor: pointer;
@@ -57,8 +58,8 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: rgba(255, 255, 0, 0.2);
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .button-container {
             display: flex;
@@ -66,20 +67,26 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+        .navigation-container {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
         #biodataBox {
-            display: none; /* Initially hidden */
+            border: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.7);
-            padding: 15px;
             border-radius: 5px;
-            width: 90%;
-            max-width: 400px;
-            margin-top: 20px;
-            color: white;
-            font-size: 16px;
-            text-align: left;
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Max width for larger screens */
+            height: auto; /* Height auto to fit content */
+            max-height: 400px; /* Set max height for scrolling */
+            overflow-y: auto; /* Enable scrolling */
+            padding: 10px;
+            margin-top: 20px; /* Space between chat and biodata box */
         }
     </style>
-    <!-- Firebase SDKs -->
     <script type="module">
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -97,11 +104,13 @@
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app); // Initialize Firestore
+        const db = getFirestore(app);
 
         // Load character data from localStorage
-        let character = JSON.parse(localStorage.getItem('character')) || {}; // Default to empty object
-        const characterName = character.aliasName ? character.aliasName : 'Anonymous'; // Use aliasName or default to 'Anonymous'
+        let character = JSON.parse(localStorage.getItem('character')) || {};
+
+        // Update character name to use aliasName from biodata or default to 'Anonymous'
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
@@ -112,13 +121,12 @@
         // Function to render messages from Firestore
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Separate collection for abandoned warehouse messages
+            chatBox.innerHTML = '';
+            const messagesRef = collection(db, "abandoned_warehouse_messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
-            // Use onSnapshot for real-time updates
             onSnapshot(q, (querySnapshot) => {
-                chatBox.innerHTML = ''; // Clear chat box on each update
+                chatBox.innerHTML = '';
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
@@ -163,20 +171,14 @@
             }
         };
 
-        // Store the current page for the "Return" button when the page loads
-        window.onload = function() {
-            renderMessages(); // Call to render messages
-        };
-
-        // Return to a fixed page (index.html)
-        window.returnToPreviousPage = function() {
-            window.location.href = 'index.html'; // Redirect to a fixed page (e.g., index.html)
-        };
-
         // Function to view biodata
         window.viewBiodata = function() {
             const biodataBox = document.getElementById('biodataBox');
             biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.onload = function() {
+            renderMessages(); // Call to render messages
         };
     </script>
 </head>
@@ -185,20 +187,21 @@
 <h1>Abandoned Warehouse</h1>
 <div id="chatBox" role="log" aria-live="polite"></div>
 <input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
+
 <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-    </div>
-    <button id="viewBiodataButton">View Biodata</button>
-    <div id="biodataBox" style="display: none;"></div>
+    <button id="sendMessage" onclick="sendMessage()">Send</button>
+    <button id="clearChat" onclick="clearChat()">Clear Chat</button>
 </div>
 
-<!-- Biodata box section -->
-<div id="biodataBox" aria-live="polite">
+<div class="navigation-container">
+    <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+    <button id="viewBiodataButton" onclick="viewBiodata()">View Biodata</button>
+</div>
+
+<div id="biodataBox" style="display: none;">
     <h3>Biodata Information</h3>
     <p>Alias Name: <strong id="aliasName"></strong></p>
-    <!-- You can add more biodata fields as needed -->
+    <!-- Add more biodata fields here as needed -->
 </div>
 
 </body>
