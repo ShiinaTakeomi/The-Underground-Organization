@@ -160,6 +160,11 @@
         window.returnToPreviousPage = function() {
             window.location.href = 'index.html'; // Redirect to a fixed page (e.g., index.html)
         };
+
+        // Function to view biodata
+        window.viewBiodata = function() {
+            window.location.href = 'biodata.html'; // Navigate to biodata page
+        };
     </script>
 </head>
 <body>
@@ -170,7 +175,7 @@
 <div class="button-container">
     <button onclick="sendMessage()" aria-label="Send message">Send</button>
     <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
+    <button onclick="viewBiodata()" aria-label="View biodata">View Biodata</button> <!-- Updated button for biodata -->
     <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
 </div>
 
