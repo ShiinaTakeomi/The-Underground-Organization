@@ -58,7 +58,7 @@
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 0, 0.2);
         }
         .button-container {
             display: flex;
@@ -151,9 +151,15 @@
             }
         };
 
-        // Load messages and render them
+        // Store the current page for the "Return" button when the page loads
         window.onload = function() {
             renderMessages(); // Call to render messages
+
+            // Store the current page for the "Return" button
+            const currentPage = window.location.href;
+            if (!sessionStorage.getItem('previousPage')) {
+                sessionStorage.setItem('previousPage', currentPage);
+            }
 
             // Add event listener for the Enter key
             const messageInput = document.getElementById('messageInput');
@@ -163,12 +169,6 @@
                     sendMessage(); // Call sendMessage function
                 }
             });
-
-            // Store the current page for the "Return" button
-            const currentPage = window.location.href;
-            if (!sessionStorage.getItem('previousPage')) {
-                sessionStorage.setItem('previousPage', currentPage);
-            }
         };
 
         // Enhanced return function with fallback to a specific page
