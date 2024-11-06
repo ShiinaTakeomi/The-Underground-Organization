@@ -163,6 +163,11 @@
                     sendMessage(); // Call sendMessage function
                 }
             });
+
+            // Store the current page for the "Return" button
+            if (!sessionStorage.getItem('previousPage')) {
+                sessionStorage.setItem('previousPage', window.location.href);
+            }
         };
     </script>
 </head>
@@ -175,7 +180,7 @@
     <button onclick="sendMessage()" aria-label="Send message">Send</button>
     <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
     <button onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
-    <button onclick="window.location.href='index.html'" aria-label="Return to BackAlley">Return to BackAlley</button>
+    <button onclick="window.location.href=sessionStorage.getItem('previousPage')" aria-label="Return">Return</button>
 </div>
 
 </body>
