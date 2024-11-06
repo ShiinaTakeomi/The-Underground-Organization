@@ -202,6 +202,12 @@
             document.getElementById('viewBiodataButton').onclick = function() {
                 biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
             };
+
+            // Store the referring page URL in localStorage before navigating to Biodata
+            document.getElementById('viewBiodataButton').onclick = function() {
+                localStorage.setItem('previousPage', window.location.href);
+                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            };
         };
     </script>
 </head>
@@ -210,28 +216,13 @@
     <div id="chatBox"></div>
     <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button onclick="window.location.href = 'biodata.html'">Biodata</button> <!-- New Biodata button -->
-        <button id="returnButton">Return</button> <!-- Return button -->
+        <button onclick="sendMessage()">Send Message</button>
+        <button onclick="clearChat()">Clear Chat</button>
+        <button id="viewBiodataButton">View Biodata</button>
     </div>
-<script>
-    // Set the href of the return button to the referring page or fall back to 'index.html'
-    const returnButton = document.getElementById('returnButton');
-    const previousPage = document.referrer; // Get the referring URL
-
-    // Check if the referring page is 'biodata.html'
-    if (previousPage.includes('biodata.html')) {
-        // If the previous page is 'biodata.html', go back to the previous page before it
-        returnButton.onclick = () => window.history.back(); // Go to the page before biodata.html
-    } else if (previousPage) {
-        // Otherwise, use the referring URL or fall back to 'index.html'
-        returnButton.onclick = () => window.location.href = previousPage;
-    } else {
-        returnButton.onclick = () => window.location.href = 'index.html'; // Default to 'index.html'
-    }
-</script>
-    <button id="viewBiodataButton">View Biodata</button> <!-- View Biodata button -->
+    <div class="navigation-container">
+        <button onclick="location.href = localStorage.getItem('previousPage') || 'index.html';">Return</button>
+    </div>
     <div id="biodataBox"></div>
 </body>
 </html>
