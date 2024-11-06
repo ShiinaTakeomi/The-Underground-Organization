@@ -66,18 +66,6 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-        #biodataBox {
-            border: 1px solid #ccc;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            width: 90%; /* Responsive width */
-            max-width: 400px; /* Max width for larger screens */
-            height: auto; /* Height auto to fit content */
-            max-height: 400px; /* Set max height for scrolling */
-            overflow-y: auto; /* Enable scrolling */
-            padding: 10px;
-            margin-top: 20px; /* Space between chat and biodata box */
-        }
     </style>
     <!-- Firebase SDKs -->
     <script type="module">
@@ -134,19 +122,20 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: characterName,
+                    sender: characterName, // Use the character name
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
+                // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage);
-                    messageInput.value = '';
+                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
+                    messageInput.value = ''; // Clear input field
                 } catch (error) {
                     console.error("Error sending message: ", error);
-                    alert("Failed to send message. Please try again.");
+                    alert("Failed to send message. Please try again."); // Alert for failed message send
                 }
             } else {
-                alert("Please enter a message.");
+                alert("Please enter a message."); // Alert for empty message
             }
         };
 
@@ -162,53 +151,28 @@
             }
         };
 
-        // Load messages and render them
+        // Store the current page for the "Return" button when the page loads
         window.onload = function() {
-            renderMessages();
+            renderMessages(); // Call to render messages
+        };
 
-            const messageInput = document.getElementById('messageInput');
-            messageInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            // Load biodata and display it
-            const biodataBox = document.getElementById('biodataBox');
-            if (character) {
-                biodataBox.innerHTML = ` 
-                    <h2>Biodata</h2>
-                    <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
-                    <strong>Age:</strong> ${character.age || 'N/A'}<br>
-                    <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
-                    <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
-                    <strong>Height:</strong> ${character.height || 'N/A'}<br>
-                    <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
-                    <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
-                    <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
-                    <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
-                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
-                `;
-            }
-
-            // Function to display biodata
-            document.getElementById('viewBiodataButton').onclick = function() {
-                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
-            };
+        // Return to a fixed page (index.html)
+        window.returnToPreviousPage = function() {
+            window.location.href = 'index.html'; // Redirect to a fixed page (e.g., index.html)
         };
     </script>
 </head>
 <body>
-    <h1>Abandoned Warehouse</h1>
-    <div id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="Type your message...">
-    <div class="button-container">
-        <button onclick="sendMessage()">Send</button>
-        <button onclick="clearChat()">Clear Chat</button>
-        <button id="viewBiodataButton">View Biodata</button>
-    </div>
-    <!-- Biodata Section -->
-    <div id="biodataBox" style="display: none;"></div>
+
+<h1>Abandoned Warehouse</h1>
+<div id="chatBox" role="log" aria-live="polite"></div>
+<input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
+<div class="button-container">
+    <button onclick="sendMessage()" aria-label="Send message">Send</button>
+    <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
+    <button onclick="window.location.href='biodata.html'" aria-label="View biodata">View Biodata</button>
+    <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
+</div>
+
 </body>
 </html>
