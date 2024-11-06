@@ -17,27 +17,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             min-height: 100vh;
             margin: 0;
+            padding-bottom: 20px; /* Add some padding at the bottom */
             overflow-y: auto; /* Enable scrolling for the entire page */
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
+            width: 100%;
         }
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
-            overflow-y: auto; /* Allow scroll without buttons */
+            overflow-y: auto; /* Enable scrolling */
             padding: 10px;
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 5px;
             width: 90%;
             max-width: 400px;
-            scrollbar-width: thin; /* Makes scrollbar thinner */
-            scrollbar-color: rgba(255, 255, 255, 0.6) rgba(0, 0, 0, 0.7); /* Custom scrollbar color */
         }
         #messageInput {
             width: calc(100% - 30px);
@@ -67,6 +66,13 @@
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
+        }
+        .navigation-container {
+            display: flex;
+            justify-content: flex-start; /* Align buttons to the left */
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
         }
         #biodataBox {
             display: none; /* Initially hidden */
@@ -102,8 +108,8 @@
         const db = getFirestore(app); // Initialize Firestore
 
         // Load character data from localStorage
-        let character = JSON.parse(localStorage.getItem('character')) || {}; // Default to empty object
-        const characterName = character.aliasName ? character.aliasName : 'Anonymous'; // Use aliasName or default to 'Anonymous'
+        let character = JSON.parse(localStorage.getItem('character')) || {}; // Default to empty object if not found
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous'; // Use alias name or default to 'Anonymous'
 
         // Function to format timestamp
         function formatTimestamp(utcTimestamp) {
@@ -114,13 +120,12 @@
         // Function to render messages
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = ''; // Clear chat box
-            const messagesRef = collection(db, "abandoned_warehouse_messages"); // Separate collection for abandoned warehouse messages
+            chatBox.innerHTML = ''; // Clear existing messages
+            const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
-            // Use onSnapshot for real-time updates
             onSnapshot(q, (querySnapshot) => {
-                chatBox.innerHTML = ''; // Clear chat box on each update
+                chatBox.innerHTML = ''; // Clear previous chat content
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
@@ -136,20 +141,19 @@
             const messageInput = document.getElementById('messageInput');
             if (messageInput.value.trim() !== '') {
                 const newMessage = {
-                    sender: characterName, // Use the character name
+                    sender: characterName,
                     content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
-                // Add message to Firestore
                 try {
-                    await addDoc(collection(db, "abandoned_warehouse_messages"), newMessage); // Add to the new collection
-                    messageInput.value = ''; // Clear input field
+                    await addDoc(collection(db, "messages"), newMessage);
+                    messageInput.value = ''; // Clear message input after sending
                 } catch (error) {
                     console.error("Error sending message: ", error);
-                    alert("Failed to send message. Please try again."); // Alert for failed message send
+                    alert("Failed to send message. Please try again.");
                 }
             } else {
-                alert("Please enter a message."); // Alert for empty message
+                alert("Please enter a message.");
             }
         };
 
@@ -157,50 +161,63 @@
         window.clearChat = async function() {
             const confirmClear = confirm("Are you sure you want to clear the chat?");
             if (confirmClear) {
-                const messagesRef = collection(db, "abandoned_warehouse_messages");
+                const messagesRef = collection(db, "messages");
                 const messagesSnapshot = await getDocs(messagesRef);
                 messagesSnapshot.forEach(async (doc) => {
-                    await deleteDoc(doc.ref);
+                    await deleteDoc(doc.ref); // Delete all messages
                 });
             }
         };
 
-        // Store the current page for the "Return" button when the page loads
+        // Load messages and render them
         window.onload = function() {
-            renderMessages(); // Call to render messages
-        };
+            renderMessages(); // Initial call to load messages
 
-        // Return to a fixed page (index.html)
-        window.returnToPreviousPage = function() {
-            window.location.href = 'index.html'; // Redirect to a fixed page (e.g., index.html)
-        };
+            const messageInput = document.getElementById('messageInput');
+            messageInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Prevent page reload on enter
+                    sendMessage(); // Send message on enter key press
+                }
+            });
 
-        // Function to view biodata
-        window.viewBiodata = function() {
+            // Load biodata and display it
             const biodataBox = document.getElementById('biodataBox');
-            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            if (character) {
+                biodataBox.innerHTML = ` 
+                    <h2>Biodata</h2>
+                    <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
+                    <strong>Age:</strong> ${character.age || 'N/A'}<br>
+                    <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
+                    <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
+                    <strong>Height:</strong> ${character.height || 'N/A'}<br>
+                    <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
+                    <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
+                    <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
+                    <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
+                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
+                `;
+            }
+
+            // Function to display biodata
+            document.getElementById('viewBiodataButton').onclick = function() {
+                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            };
         };
     </script>
 </head>
 <body>
-
-<h1>Abandoned Warehouse</h1>
-<div id="chatBox" role="log" aria-live="polite"></div>
-<input type="text" id="messageInput" placeholder="Type your message here..." aria-label="Message input">
-<div class="button-container">
-    <button onclick="window.location.href='biodata.html'" aria-label="Biodata">Biodata</button> <!-- Biodata button -->
-    <button onclick="sendMessage()" aria-label="Send message">Send</button>
-    <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
-    <button onclick="viewBiodata()" aria-label="View biodata">View Biodata</button> <!-- View biodata button -->
-    <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
-</div>
-
-<!-- Biodata box section -->
-<div id="biodataBox" aria-live="polite">
-    <h3>Biodata Information</h3>
-    <p>Alias Name: <strong id="aliasName"></strong></p>
-    <!-- You can add more biodata fields as needed -->
-</div>
-
+    <h1>Abandoned Warehouse</h1>
+    <div id="chatBox"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <div class="button-container">
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+    </div>
+    <div class="navigation-container">
+        <button id="viewBiodataButton">View Biodata</button>
+        <button onclick="window.history.back();">Return</button>
+    </div>
+    <div id="biodataBox"></div> <!-- Biodata display box -->
 </body>
 </html>
