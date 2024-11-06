@@ -165,9 +165,16 @@
             });
 
             // Store the current page for the "Return" button
+            const currentPage = window.location.href;
             if (!sessionStorage.getItem('previousPage')) {
-                sessionStorage.setItem('previousPage', window.location.href);
+                sessionStorage.setItem('previousPage', currentPage);
             }
+        };
+
+        // Handle the return action on button click
+        window.returnToPreviousPage = function() {
+            const previousPage = sessionStorage.getItem('previousPage') || 'index.html'; // Default to index.html if no previous page
+            window.location.href = previousPage; // Navigate to the previous page
         };
     </script>
 </head>
@@ -180,7 +187,7 @@
     <button onclick="sendMessage()" aria-label="Send message">Send</button>
     <button onclick="clearChat()" aria-label="Clear chat">Clear Chat</button>
     <button onclick="window.location.href='biodata.html'" aria-label="View biodata">Biodata</button>
-    <button onclick="window.location.href=sessionStorage.getItem('previousPage') || 'index.html'" aria-label="Return">Return</button>
+    <button onclick="returnToPreviousPage()" aria-label="Return">Return</button>
 </div>
 
 </body>
