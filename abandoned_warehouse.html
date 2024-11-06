@@ -154,39 +154,11 @@
         // Store the current page for the "Return" button when the page loads
         window.onload = function() {
             renderMessages(); // Call to render messages
-
-            // Store the current page for the "Return" button
-            const currentPage = window.location.href;
-            if (!sessionStorage.getItem('previousPage')) {
-                sessionStorage.setItem('previousPage', currentPage);
-            }
-
-            // Add event listener for the Enter key
-            const messageInput = document.getElementById('messageInput');
-            messageInput.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault(); // Prevent the default action (form submission)
-                    sendMessage(); // Call sendMessage function
-                }
-            });
         };
 
-        // Enhanced return function with fallback to a specific page
+        // Return to a fixed page (index.html)
         window.returnToPreviousPage = function() {
-            const previousPage = sessionStorage.getItem('previousPage');
-            
-            // Check if we have a previous page stored in sessionStorage
-            if (previousPage) {
-                window.location.href = previousPage; // Go back to the stored page
-            } else {
-                // If no previous page is stored, check if there's history available in the browser
-                if (window.history.length > 1) {
-                    window.history.back(); // Go back in browser history
-                } else {
-                    // If no history is available, navigate to the homepage or a default page
-                    window.location.href = 'index.html'; // Or any other default page
-                }
-            }
+            window.location.href = 'index.html'; // Redirect to a fixed page (e.g., index.html)
         };
     </script>
 </head>
