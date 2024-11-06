@@ -86,6 +86,34 @@
             padding: 10px;
             margin-top: 20px; /* Space between chat and biodata box */
         }
+        .left-side-navigation {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+
+        .left-side-navigation button {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 200px;
+        }
+
+        .left-side-navigation button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
     <script type="module">
         // Your web app's Firebase configuration
@@ -186,40 +214,36 @@
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
                 biodataBox.innerHTML = `
-                    <h2>Biodata</h2>
-                    <strong>Alias Name:</strong> ${character.aliasName || 'Anonymous'}<br>
-                    <strong>Age:</strong> ${character.age || 'N/A'}<br>
-                    <strong>Gender:</strong> ${character.gender || 'N/A'}<br>
-                    <strong>Sexuality:</strong> ${character.sexuality || 'N/A'}<br>
-                    <strong>Height:</strong> ${character.height || 'N/A'}<br>
-                    <strong>Weight:</strong> ${character.weight || 'N/A'}<br>
-                    <strong>Body Type:</strong> ${character.bodyType || 'N/A'}<br>
-                    <strong>Appearance:</strong> ${character.appearance || 'N/A'}<br>
-                    <strong>Personality:</strong> ${character.personality || 'N/A'}<br>
-                    <strong>Hobbies:</strong> ${character.hobbies || 'N/A'}
+                    <h3>${character.aliasName}</h3>
+                    <p><strong>Age:</strong> ${character.age}</p>
+                    <p><strong>Gender:</strong> ${character.gender}</p>
+                    <p><strong>Height:</strong> ${character.height}</p>
+                    <p><strong>Body Type:</strong> ${character.bodyType}</p>
+                    <p><strong>Personality:</strong> ${character.personality}</p>
                 `;
             }
-
-            // Function to display biodata
-            document.getElementById('viewBiodataButton').onclick = function() {
-                biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
-            };
         };
     </script>
 </head>
 <body>
     <h1>The Underground Organization</h1>
+    
     <div id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="Type your message...">
     <div class="button-container">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <input id="messageInput" type="text" placeholder="Type your message...">
+        <button id="sendMessage" onclick="sendMessage()">Send Message</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
     </div>
+
     <div class="navigation-container">
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+        <div class="left-side-navigation">
+            <button id="biodataButton" onclick="window.location.href = 'biodata.html'">Biodata</button>
+            <button id="abandonedWarehouseButton" onclick="window.location.href = 'abandonedWarehouse.html'">Abandoned Warehouse</button>
+        </div>
     </div>
+
     <button id="viewBiodataButton">View Biodata</button>
-    <div id="biodataBox" style="display: none;"></div>
+
+    <div id="biodataBox"></div>
 </body>
 </html>
