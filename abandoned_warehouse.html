@@ -212,7 +212,11 @@
     <div class="button-container">
         <button id="sendMessage" onclick="sendMessage()">Send</button>
         <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="viewBiodataButton">View Biodata</button> <!-- Moved here -->
+        <button onclick="window.location.href = 'biodata.html'">Biodata</button> 
+        <button id="viewBiodataButton">View Biodata</button> <!-- Added this button -->
+    </div>
+    <div class="navigation-container">
+        <button onclick="window.location.href = 'index.html'">Return</button>
     </div>
     <div id="biodataBox"></div>
 </body>
