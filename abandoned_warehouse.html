@@ -20,7 +20,7 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            overflow-y: auto; /* Enable scrolling for the entire page */
         }
         h1 {
             text-align: center;
@@ -29,13 +29,15 @@
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
-            overflow-y: scroll;
+            overflow-y: auto; /* Allow scroll without buttons */
             padding: 10px;
             margin-bottom: 10px;
             background-color: rgba(0, 0, 0, 0.7);
             border-radius: 5px;
             width: 90%;
             max-width: 400px;
+            scrollbar-width: thin; /* Makes scrollbar thinner */
+            scrollbar-color: rgba(255, 255, 255, 0.6) rgba(0, 0, 0, 0.7); /* Custom scrollbar color */
         }
         #messageInput {
             width: calc(100% - 30px);
@@ -109,7 +111,7 @@
             return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
         }
 
-        // Function to render messages from Firestore
+        // Function to render messages
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = ''; // Clear chat box
