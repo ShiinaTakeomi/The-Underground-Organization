@@ -4,66 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Biodata</title>
+    <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
     <style>
         body {
-            background-color: #222;
+            background-image: url('https://i.pinimg.com/564x/8a/93/0b/8a930bf01ab716376429c8e97702dc23.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start; /* Changed from center to flex-start */
+            min-height: 100vh;
             margin: 0;
+            padding: 20px; /* Add some padding to the body for better spacing */
         }
         h1 {
+            text-align: center;
             margin-bottom: 20px;
         }
-        input {
-            margin: 10px;
+        form {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea {
+            width: calc(100% - 20px);
             padding: 10px;
-            width: 300px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
         }
         button {
             padding: 10px 15px;
-            margin-top: 10px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
     </style>
 </head>
 <body>
 
-<h1>Character Biodata</h1>
+<h1>Biodata</h1>
 <form id="biodataForm">
-    <input type="text" id="name" placeholder="Character Name" required>
-    <input type="number" id="age" placeholder="Age" required>
-    <input type="text" id="gender" placeholder="Gender" required>
-    <input type="text" id="race" placeholder="Race" required>
-    <input type="text" id="class" placeholder="Character Class" required>
-    <button type="submit">Submit</button>
+    <label for="aliasName">Alias Name:</label>
+    <input type="text" id="aliasName" name="aliasName" required>
+    
+    <label for="age">Age:</label>
+    <input type="number" id="age" name="age" required>
+
+    <label for="gender">Gender:</label>
+    <input type="text" id="gender" name="gender" required>
+
+    <label for="sexuality">Sexuality:</label>
+    <input type="text" id="sexuality" name="sexuality">
+
+    <label for="height">Height:</label>
+    <input type="text" id="height" name="height">
+
+    <label for="weight">Weight:</label>
+    <input type="text" id="weight" name="weight">
+
+    <label for="bodyType">Body Type:</label>
+    <input type="text" id="bodyType" name="bodyType">
+
+    <label for="appearance">Appearance:</label>
+    <textarea id="appearance" name="appearance" rows="4"></textarea>
+
+    <label for="personality">Personality:</label>
+    <textarea id="personality" name="personality" rows="4"></textarea>
+
+    <label for="hobbies">Hobbies:</label>
+    <textarea id="hobbies" name="hobbies" rows="4"></textarea>
+
+    <button type="submit">Save Biodata</button>
 </form>
-<button id="returnButton">Return to Chat</button>
+
+<!-- Return to Previous Page button -->
+<a href="#" id="returnButton" style="text-decoration: none; margin-top: 20px; display: inline-block;">
+    <button>Return</button>
+</a>
 
 <script>
-    document.getElementById('biodataForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const name = document.getElementById('name').value;
-        const age = document.getElementById('age').value;
-        const gender = document.getElementById('gender').value;
-        const race = document.getElementById('race').value;
-        const charClass = document.getElementById('class').value;
+    // Load character data from localStorage
+    const character = JSON.parse(localStorage.getItem('character')) || {};
 
-        // Save character details to localStorage
-        const character = { name, age, gender, race, charClass };
-        localStorage.setItem('character', JSON.stringify(character));
+    // Populate form fields if character data exists
+    if (character) {
+        document.getElementById('aliasName').value = character.aliasName || '';
+        document.getElementById('age').value = character.age || '';
+        document.getElementById('gender').value = character.gender || '';
+        document.getElementById('sexuality').value = character.sexuality || '';
+        document.getElementById('height').value = character.height || '';
+        document.getElementById('weight').value = character.weight || '';
+        document.getElementById('bodyType').value = character.bodyType || '';
+        document.getElementById('appearance').value = character.appearance || '';
+        document.getElementById('personality').value = character.personality || '';
+        document.getElementById('hobbies').value = character.hobbies || '';
+    }
 
-        alert(`Character Created!\nName: ${name}\nAge: ${age}\nGender: ${gender}\nRace: ${race}\nClass: ${charClass}`);
-        // Redirect back to the main page
-        window.location.href = 'index.html';
-    });
+    // Handle form submission
+    document.getElementById('biodataForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent form submission
+        const biodata = {
+            aliasName: document.getElementById('aliasName').value,
+            age: document.getElementById('age').value,
+            gender: document.getElementById('gender').value,
+            sexuality: document.getElementById('sexuality').value,
+            height: document.getElementById('height').value,
+            weight: document.getElementById('weight').value,
+            bodyType: document.getElementById('bodyType').value,
+            appearance: document.getElementById('appearance').value,
+            personality: document.getElementById('personality').value,
+            hobbies: document.getElementById('hobbies').value,
+        };
 
-    document.getElementById('returnButton').addEventListener('click', () => {
-        window.location.href = 'index.html'; // Redirect back to the chat page
-    });
+        // Save biodata to localStorage
+        localStorage.setItem('character', JSON.stringify(biodata));
+        alert("Biodata saved successfully!");
+    };
+
+    // Set the "Return" button to go back to the previous page
+    const returnButton = document.getElementById('returnButton');
+    const previousPage = document.referrer; // Get the referring URL
+    if (previousPage) {
+        returnButton.href = previousPage; // Set the href to the referring page
+    } else {
+        returnButton.href = 'index.html'; // Default to BackAlley if no referrer
+    }
 </script>
 
 </body>
