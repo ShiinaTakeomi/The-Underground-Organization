@@ -148,11 +148,11 @@
         }
 
         // Function to render messages from Firestore
-        function renderMessages() {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '';
-            const messagesRef = collection(db, "messages");
-            const q = query(messagesRef, orderBy("timestamp"));
+            function renderMessages() {
+                const chatBox = document.getElementById('chatBox');
+                chatBox.innerHTML = '';
+                const messagesRef = collection(db, "messages");
+                const q = query(messagesRef, orderBy("timestamp"));
 
             onSnapshot(q, (querySnapshot) => {
                 chatBox.innerHTML = '';
@@ -163,6 +163,7 @@
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight; // Auto scroll to bottom
+                playNotificationSound(); // Play notification sound whenever a new message is added
             });
         }
 
@@ -186,7 +187,12 @@
                 alert("Please enter a message.");
             }
         };
-
+        
+        // Function to play notification sound
+         function playNotificationSound() {
+             const audio = new Audio('https://drive.google.com/uc?export=download&id=1F2jORpyd1VQPsQBLeMaDBr1hAG7RDgDL');
+             audio.play();
+        }
         // Function to clear chat
         window.clearChat = async function() {
             const confirmClear = confirm("Are you sure you want to clear the chat?");
