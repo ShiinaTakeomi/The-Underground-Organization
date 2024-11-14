@@ -59,7 +59,7 @@
             transition: background-color 0.3s;
         }
         #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+            background-color: rgba(255, 255, 0.2);
         }
         .button-container {
             display: flex;
@@ -123,19 +123,17 @@
 
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '';
             const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
             onSnapshot(q, (querySnapshot) => {
-                chatBox.innerHTML = '';
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
                     messageElement.innerHTML = `${message.sender}: ${message.content}`;
                     chatBox.appendChild(messageElement);
                 });
-                chatBox.scrollTop = chatBox.scrollHeight;
+                chatBox.scrollTop = chatBox.scrollHeight; // Ensure the chat box scrolls to the latest message
             });
         }
 
