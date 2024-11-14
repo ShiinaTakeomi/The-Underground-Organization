@@ -121,11 +121,6 @@
         let character = JSON.parse(localStorage.getItem('character')) || {};
         const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
-        function formatTimestamp(utcTimestamp) {
-            const date = new Date(utcTimestamp * 1000);
-            return date.toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' });
-        }
-
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = '';
@@ -137,7 +132,7 @@
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
-                    messageElement.innerHTML = `${message.sender}: ${message.content}<br>${formatTimestamp(message.timestamp)}`;
+                    messageElement.innerHTML = `${message.sender}: ${message.content}`;
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -188,7 +183,7 @@
             renderMessages();
             const biodataBox = document.getElementById('biodataBox');
             if (character) {
-                biodataBox.innerHTML = `
+                biodataBox.innerHTML = `  
                     <h3>${character.aliasName}</h3>
                     <p><strong>Age:</strong> ${character.age}</p>
                     <p><strong>Gender:</strong> ${character.gender}</p>
