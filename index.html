@@ -207,7 +207,13 @@
                 `;
             }
         };
-    </script>
+      // Add this code below the window.onload function
+      document.getElementById('messageInput').addEventListener('keydown', function(event) {
+          if (event.key === 'Enter') {
+              sendMessage();
+        }
+    });
+</script>
 </head>
 <body>
     <div class="left-side-navigation">
