@@ -59,7 +59,7 @@
             transition: background-color 0.3s;
         }
         #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
-            background-color: rgba(255, 255, 0.2);
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .button-container {
             display: flex;
@@ -121,39 +121,30 @@
         let character = JSON.parse(localStorage.getItem('character')) || {};
         const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
-        let isFirstLoad = true; // Track if it's the first load
-
         function renderMessages() {
             const chatBox = document.getElementById('chatBox');
+            chatBox.innerHTML = '';
             const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
-            // Clear the chat box only once on the first load
-            if (isFirstLoad) {
-                chatBox.innerHTML = '';
-                isFirstLoad = false;
-            }
-
             onSnapshot(q, (querySnapshot) => {
+                chatBox.innerHTML = '';
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
                     const messageElement = document.createElement('div');
                     messageElement.innerHTML = `${message.sender}: ${message.content}`;
                     chatBox.appendChild(messageElement);
                 });
-                chatBox.scrollTop = chatBox.scrollHeight; // Ensure the chat box scrolls to the latest message
+                chatBox.scrollTop = chatBox.scrollHeight;
             });
         }
 
         window.sendMessage = async function() {
             const messageInput = document.getElementById('messageInput');
-            const message = messageInput.value.trim();            
-
-            // Only send the message if it's not empty
-            if (message !== '') {
+            if (messageInput.value.trim() !== '') {
                 const newMessage = {
                     sender: characterName,
-                    content: message,
+                    content: messageInput.value,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
                 try {
@@ -205,28 +196,34 @@
                 `;
             }
         };
+
+        // Add this code below the window.onload function
+        document.getElementById('messageInput').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
     </script>
 </head>
 <body>
-    <h1>Welcome to The Underground Organization</h1>
-
-    <div id="chatBox"></div>
-    <input type="text" id="messageInput" placeholder="Type your message...">
-    <button id="sendMessage" onclick="sendMessage()">Send Message</button>
-
-    <div class="button-container">
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="biodataButton" onclick="toggleBiodata()">View Biodata</button>
-        <button id="viewBiodataButton" onclick="toggleBiodata()">Toggle Biodata</button>
+    <div class="left-side-navigation">
+        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
+        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned-warehouse.html'">Abandoned Warehouse</button>
     </div>
 
-    <div class="navigation-container">
-        <button id="abandonedWarehouseButton">Abandoned Warehouse</button>
+    <h1>The Underground Organization</h1>
+
+    <div id="chatBox"></div>
+
+    <div class="button-container">
+        <input type="text" id="messageInput" placeholder="Enter message here">
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
     </div>
 
     <div id="biodataBox"></div>
-    <div id="financialBox"></div>
 
-    <script src="https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js"></script>
+    <div id="financialBox"></div>
 </body>
 </html>
