@@ -126,6 +126,9 @@
             const messagesRef = collection(db, "messages");
             const q = query(messagesRef, orderBy("timestamp"));
 
+            // Clear the chat box before re-rendering to prevent duplication
+            chatBox.innerHTML = '';
+
             onSnapshot(q, (querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
