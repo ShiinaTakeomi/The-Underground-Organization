@@ -139,10 +139,13 @@
 
         window.sendMessage = async function() {
             const messageInput = document.getElementById('messageInput');
-            if (messageInput.value.trim() !== '') {
+            const message = messageInput.value.trim();            
+
+            // Only send the message if it's not empty
+            if (message !== '') {
                 const newMessage = {
                     sender: characterName,
-                    content: messageInput.value,
+                    content: message,
                     timestamp: Math.floor(Date.now() / 1000)
                 };
                 try {
