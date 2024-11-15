@@ -21,6 +21,15 @@
             margin: 0;
             padding-bottom: 20px;
         }
+        
+        /* Responsive adjustments for mobile */
+        @media (max-width: 768px) {
+            body {
+                background-size: contain; /* Ensures image scales without cropping on smaller screens */
+                background-attachment: scroll;
+            }
+        }
+
         h1 {
             text-align: center;
             color: white;
