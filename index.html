@@ -3,7 +3,7 @@
 <style>
     body {
         background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
-        background-size: cover; /* Cover ensures the image covers the entire screen */
+        background-size: contain; /* Cover ensures the image covers the entire screen */
         background-position: center center; /* Keeps the image centered */
         background-repeat: no-repeat; /* Prevents repeating the image */
         background-attachment: scroll; /* Remove fixed background for mobile performance */
@@ -15,6 +15,7 @@
         min-height: 100vh;
         margin: 0;
         padding-bottom: 20px;
+        overflow-y: auto; /* Enables vertical scrolling */
     }
 
     /* Responsive adjustments for mobile */
