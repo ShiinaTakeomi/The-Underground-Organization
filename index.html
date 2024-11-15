@@ -1,41 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Underground Organization</title>
-    <link rel="icon" href="data:,"> <!-- Prevent favicon request -->
-    <style>
-        body {
-            background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding-bottom: 20px;
-        }
-        
-        /* Responsive adjustments for mobile */
-        @media (max-width: 768px) {
-            body {
-                background-size: contain; /* Ensures image scales without cropping on smaller screens */
-                background-attachment: scroll;
-            }
-        }
+<style>
+    body {
+        background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
+        background-size: cover; /* Cover ensures the image covers the entire screen */
+        background-position: center center; /* Keeps the image centered */
+        background-repeat: no-repeat; /* Prevents repeating the image */
+        background-attachment: scroll; /* Remove fixed background for mobile performance */
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding-bottom: 20px;
+    }
 
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-            width: 100%;
+    /* Responsive adjustments for mobile */
+    @media (max-width: 768px) {
+        body {
+            background-size: cover; /* Keeps the image scaling to cover the screen */
+            background-attachment: scroll; /* Ensure mobile-friendly background */
         }
+    }
+
+    h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+        width: 100%;
+    }
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
