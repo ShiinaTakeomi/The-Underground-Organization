@@ -154,15 +154,7 @@
             Chat with The Underground Organization
         </div>
         <div id="chatBox" class="chat-body">
-            <!-- Example messages -->
-            <div class="message received">
-                Hello! How can I help you?
-                <div class="timestamp">10:00 AM</div>
-            </div>
-            <div class="message sent">
-                Hi, I need some information.
-                <div class="timestamp">10:01 AM</div>
-            </div>
+            <!-- MRPG Chat System -->
         </div>
         <div class="chat-footer">
             <input type="text" id="messageInput" placeholder="Type a message">
@@ -174,54 +166,6 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        const chatBox = document.getElementById('chatBox');
-        const messageInput = document.getElementById('messageInput');
-
-        const messagesRef = collection(db, "messages");
-        const q = query(messagesRef, orderBy("timestamp"));
-
-        onSnapshot(q, (querySnapshot) => {
-            chatBox.innerHTML = '';
-            querySnapshot.forEach((doc) => {
-                const message = doc.data();
-                const messageDiv = document.createElement('div');
-                messageDiv.classList.add('message', message.sender === 'Me' ? 'sent' : 'received');
-                messageDiv.innerHTML = `
-                    ${message.content}
-                    <div class="timestamp">${new Date(message.timestamp * 1000).toLocaleTimeString()}</div>
-                `;
-                chatBox.appendChild(messageDiv);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-
-        document.getElementById('sendMessage').addEventListener('click', async () => {
-            if (messageInput.value.trim() !== '') {
-                const newMessage = {
-                    sender: 'Me',
-                    content: messageInput.value,
-                    timestamp: Math.floor(Date.now() / 1000)
-                };
-                await addDoc(messagesRef, newMessage);
-                messageInput.value = '';
-            }
-        });
-    </script>
+    <script defer="defer" src="/main.53ddbcbaa2f69d26fa3d.js"></script>
 </body>
 </html>
