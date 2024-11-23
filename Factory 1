@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factory 1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #2980b9;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3498db;
+        }
+        .money, .earnings {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+        .upgrade {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Factory</h1>
+    <p class="money">Money: $<span id="money">0</span></p>
+    <button id="workButton">Work (Click to Earn $1)</button>
+    <p class="earnings">Earnings Per Second: $<span id="earningsPerSec">0</span></p>
+    <div class="upgrade">
+        <button id="upgradeButton">Buy Upgrade (Cost: $100)</button>
+    </div>
+
+    <script>
+        let money = 0;
+        let earningsPerSec = 0;
+        let earningRate = 1; // How much money per click
+        let idleEarningsRate = 1; // Passive earnings per second
+        let upgradeCost = 100;
+
+        // Update the money display
+        function updateMoneyDisplay() {
+            document.getElementById("money").textContent = money;
+            document.getElementById("earningsPerSec").textContent = idleEarningsRate;
+        }
+
+        // Work function (clicking)
+        document.getElementById("workButton").addEventListener("click", () => {
+            money += earningRate;
+            updateMoneyDisplay();
+        });
+
+        // Upgrade function
+        document.getElementById("upgradeButton").addEventListener("click", () => {
+            if (money >= upgradeCost) {
+                money -= upgradeCost;
+                idleEarningsRate += 1; // Upgrade passive earnings per second
+                earningRate += 1; // Increase earnings per click
+                upgradeCost *= 1.5; // Increase the cost for the next upgrade
+                updateMoneyDisplay();
+            } else {
+                alert("You need more money to buy the upgrade.");
+            }
+        });
+
+        // Idle earnings function (every second)
+        setInterval(() => {
+            money += idleEarningsRate;
+            updateMoneyDisplay();
+        }, 1000); // Add passive earnings every 1 second
+
+        // Initial update of money display
+        updateMoneyDisplay();
+    </script>
+</body>
+</html>
