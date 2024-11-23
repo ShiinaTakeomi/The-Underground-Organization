@@ -3,10 +3,10 @@
 <style>
     body {
         background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
-        background-size: cover; /* Cover ensures the image covers the entire screen */
-        background-position: center center; /* Keeps the image centered */
-        background-repeat: no-repeat; /* Prevents repeating the image */
-        background-attachment: scroll; /* Remove fixed background for mobile performance */
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
         color: white;
         font-family: Arial, sans-serif;
         display: flex;
@@ -15,14 +15,14 @@
         min-height: 100vh;
         margin: 0;
         padding-bottom: 20px;
-        overflow-y: auto; /* Enables vertical scrolling */
+        overflow-y: auto;
     }
 
     /* Responsive adjustments for mobile */
     @media (max-width: 768px) {
         body {
-            background-size: cover; /* Keeps the image scaling to cover the screen */
-            background-attachment: scroll; /* Ensure mobile-friendly background */
+            background-size: cover;
+            background-attachment: scroll;
         }
     }
 
@@ -53,7 +53,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
-        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton {
+        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton, #financialButton {
             padding: 10px 15px;
             margin-top: 10px;
             cursor: pointer;
@@ -63,7 +63,7 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover, #financialButton:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
         .button-container {
@@ -118,7 +118,7 @@
         };
 
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
@@ -141,6 +141,9 @@
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight;
+            }, (error) => {
+                console.error("Error fetching messages: ", error);
+                alert("Failed to load chat messages. Please check your connection.");
             });
         }
 
@@ -166,11 +169,16 @@
 
         window.clearChat = async function() {
             if (confirm("Are you sure you want to clear the chat?")) {
-                const messagesRef = collection(db, "messages");
-                const messagesSnapshot = await getDocs(messagesRef);
-                messagesSnapshot.forEach(async (doc) => {
-                    await deleteDoc(doc.ref);
-                });
+                try {
+                    const messagesRef = collection(db, "messages");
+                    const messagesSnapshot = await getDocs(messagesRef);
+                    messagesSnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref);
+                    });
+                } catch (error) {
+                    console.error("Error clearing chat: ", error);
+                    alert("Failed to clear the chat. Please try again.");
+                }
             }
         };
 
@@ -179,9 +187,35 @@
             biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
         };
 
-        window.toggleFinancial = function() {
+        window.toggleFinancial = async function() {
             const financialBox = document.getElementById('financialBox');
-            financialBox.style.display = financialBox.style.display === 'block' ? 'none' : 'block';
+            if (financialBox.style.display === 'block') {
+                financialBox.style.display = 'none';
+                return;
+            }
+            try {
+                const docRef = doc(db, "financial", characterName);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p><strong>Alias:</strong> ${characterName}</p>
+                        <p><strong>Balance:</strong> $${data.balance}</p>
+                        <p><strong>Income:</strong> $${data.income}</p>
+                        <p><strong>Expenses:</strong> $${data.expenses}</p>
+                    `;
+                } else {
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p>No financial data found for ${characterName}.</p>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error fetching financial data: ", error);
+                alert("Failed to load financial data. Please try again.");
+            }
+            financialBox.style.display = 'block';
         };
 
         window.onload = function() {
@@ -201,34 +235,22 @@
                 `;
             }
         };
-
-        // Add this code below the window.onload function
-        document.getElementById('messageInput').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
     </script>
-</head>
-<body>
-    <div class="left-side-navigation">
-        <button id="biodataButton" onclick="window.location.href='biodata.html'">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="window.location.href='abandoned-warehouse.html'">Abandoned Warehouse</button>
-    </div>
-
-    <h1>The Underground Organization</h1>
-
-    <div id="chatBox"></div>
-
-    <div class="button-container">
-        <input type="text" id="messageInput" placeholder="Enter message here">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
-    </div>
-
-    <div id="biodataBox"></div>
-
-    <div id="financialBox"></div>
-</body>
+    <body>
+        <h1>Welcome to the Underground Organization</h1>
+        <div id="chatBox"></div>
+        <div class="button-container">
+            <input type="text" id="messageInput" placeholder="Type your message here" />
+            <button id="sendMessage" onclick="sendMessage()">Send</button>
+            <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        </div>
+        <div class="navigation-container">
+            <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
+            <button id="abandonedWarehouseButton" onclick="location.href='abandoned-warehouse.html'">Abandoned Warehouse</button>
+            <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
+            <button id="financialButton" onclick="toggleFinancial()">View Financial</button>
+        </div>
+        <div id="biodataBox"></div>
+        <div id="financialBox"></div>
+    </body>
 </html>
