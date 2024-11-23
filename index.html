@@ -1,94 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<style>
-    body {
-        background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
-        background-size: cover; /* Cover ensures the image covers the entire screen */
-        background-position: center center; /* Keeps the image centered */
-        background-repeat: no-repeat; /* Prevents repeating the image */
-        background-attachment: scroll; /* Remove fixed background for mobile performance */
-        color: white;
-        font-family: Arial, sans-serif;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-        padding-bottom: 20px;
-        overflow-y: auto; /* Enables vertical scrolling */
-    }
-
-    /* Responsive adjustments for mobile */
-    @media (max-width: 768px) {
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Underground Organization</title>
+    <style>
         body {
-            background-size: cover; /* Keeps the image scaling to cover the screen */
-            background-attachment: scroll; /* Ensure mobile-friendly background */
-        }
-    }
-
-    h1 {
-        text-align: center;
-        color: white;
-        margin-bottom: 20px;
-        width: 100%;
-    }
-        #chatBox {
-            border: 1px solid #ccc;
-            height: 300px;
-            overflow-y: auto;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            width: 90%;
-            max-width: 400px;
-        }
-        #messageInput {
-            width: calc(100% - 30px);
-            max-width: 350px;
-            padding: 10px;
-            margin-right: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: black;
-        }
-        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton {
-            padding: 10px 15px;
-            margin-top: 10px;
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.8);
+            background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
             color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-        .button-container {
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
-            gap: 10px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-bottom: 20px;
+            overflow-y: auto;
         }
-        .navigation-container {
-            display: flex;
-            justify-content: flex-start;
-            gap: 10px;
-            margin-top: 10px;
-            width: 100%;
-        }
-        #biodataBox, #financialBox {
-            border: 1px solid #ccc;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            width: 90%;
-            max-width: 400px;
-            padding: 10px;
-            margin-top: 20px;
-            display: none;
-        }
+
         .left-side-navigation {
             position: fixed;
             left: 0;
@@ -102,113 +35,111 @@
             margin-top: 10px;
             border-radius: 5px;
         }
+
+        .left-side-navigation button {
+            padding: 10px 15px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
         .left-side-navigation button:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
-    </style>
-    <script type="module">
-        const firebaseConfig = {
-            apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
-            authDomain: "index-d3482.firebaseapp.com",
-            projectId: "index-d3482",
-            storageBucket: "index-d3482.appspot.com",
-            messagingSenderId: "766904853047",
-            appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
-            measurementId: "G-PSTV5VW1ZW"
-        };
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-
-        let character = JSON.parse(localStorage.getItem('character')) || {};
-        const characterName = character.aliasName ? character.aliasName : 'Anonymous';
-
-        function renderMessages() {
-            const chatBox = document.getElementById('chatBox');
-            chatBox.innerHTML = '';
-            const messagesRef = collection(db, "messages");
-            const q = query(messagesRef, orderBy("timestamp"));
-
-            onSnapshot(q, (querySnapshot) => {
-                chatBox.innerHTML = '';
-                querySnapshot.forEach((doc) => {
-                    const message = doc.data();
-                    const messageElement = document.createElement('div');
-                    messageElement.innerHTML = `${message.sender}: ${message.content}`;
-                    chatBox.appendChild(messageElement);
-                });
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
+        .chat-container {
+            width: 100%;
+            max-width: 600px;
+            height: 80vh;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        window.sendMessage = async function() {
-            const messageInput = document.getElementById('messageInput');
-            if (messageInput.value.trim() !== '') {
-                const newMessage = {
-                    sender: characterName,
-                    content: messageInput.value,
-                    timestamp: Math.floor(Date.now() / 1000)
-                };
-                try {
-                    await addDoc(collection(db, "messages"), newMessage);
-                    messageInput.value = '';
-                } catch (error) {
-                    console.error("Error sending message: ", error);
-                    alert("Failed to send message. Please try again.");
-                }
-            } else {
-                alert("Please enter a message.");
-            }
-        };
+        .chat-header {
+            background-color: #075e54;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-align: center;
+        }
 
-        window.clearChat = async function() {
-            if (confirm("Are you sure you want to clear the chat?")) {
-                const messagesRef = collection(db, "messages");
-                const messagesSnapshot = await getDocs(messagesRef);
-                messagesSnapshot.forEach(async (doc) => {
-                    await deleteDoc(doc.ref);
-                });
-            }
-        };
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #dcf8c6;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
 
-        window.toggleBiodata = function() {
-            const biodataBox = document.getElementById('biodataBox');
-            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
-        };
+        .message {
+            max-width: 70%;
+            padding: 10px;
+            border-radius: 8px;
+            line-height: 1.4;
+            font-size: 14px;
+        }
 
-        window.toggleFinancial = function() {
-            const financialBox = document.getElementById('financialBox');
-            financialBox.style.display = financialBox.style.display === 'block' ? 'none' : 'block';
-        };
+        .sent {
+            background-color: #34b7f1;
+            color: white;
+            align-self: flex-end;
+        }
 
-        window.onload = function() {
-            renderMessages();
-            const biodataBox = document.getElementById('biodataBox');
-            if (character) {
-                biodataBox.innerHTML = `  
-                    <h3>${character.aliasName}</h3>
-                    <p><strong>Age:</strong> ${character.age}</p>
-                    <p><strong>Gender:</strong> ${character.gender}</p>
-                    <p><strong>Height:</strong> ${character.height}</p>
-                    <p><strong>Weight:</strong> ${character.weight}</p>
-                    <p><strong>Body Type:</strong> ${character.bodyType}</p>
-                    <p><strong>Appearance:</strong> ${character.appearance}</p>
-                    <p><strong>Personality:</strong> ${character.personality}</p>
-                    <p><strong>Hobbies:</strong> ${character.hobbies}</p>
-                `;
-            }
-        };
+        .received {
+            background-color: white;
+            color: black;
+            align-self: flex-start;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
 
-        // Add this code below the window.onload function
-        document.getElementById('messageInput').addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                sendMessage();
-            }
-        });
-    </script>
+        .timestamp {
+            font-size: 10px;
+            color: gray;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .chat-footer {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            gap: 10px;
+            background-color: #ffffff;
+        }
+
+        .chat-footer input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .chat-footer button {
+            background-color: #075e54;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-footer button:hover {
+            background-color: #064e46;
+        }
+    </style>
 </head>
 <body>
     <div class="left-side-navigation">
@@ -218,17 +149,79 @@
 
     <h1>The Underground Organization</h1>
 
-    <div id="chatBox"></div>
-
-    <div class="button-container">
-        <input type="text" id="messageInput" placeholder="Enter message here">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-        <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
+    <div class="chat-container">
+        <div class="chat-header">
+            Chat with The Underground Organization
+        </div>
+        <div id="chatBox" class="chat-body">
+            <!-- Example messages -->
+            <div class="message received">
+                Hello! How can I help you?
+                <div class="timestamp">10:00 AM</div>
+            </div>
+            <div class="message sent">
+                Hi, I need some information.
+                <div class="timestamp">10:01 AM</div>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="messageInput" placeholder="Type a message">
+            <button id="sendMessage">
+                <svg width="24" height="24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                </svg>
+            </button>
+        </div>
     </div>
 
-    <div id="biodataBox"></div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
-    <div id="financialBox"></div>
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const chatBox = document.getElementById('chatBox');
+        const messageInput = document.getElementById('messageInput');
+
+        const messagesRef = collection(db, "messages");
+        const q = query(messagesRef, orderBy("timestamp"));
+
+        onSnapshot(q, (querySnapshot) => {
+            chatBox.innerHTML = '';
+            querySnapshot.forEach((doc) => {
+                const message = doc.data();
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', message.sender === 'Me' ? 'sent' : 'received');
+                messageDiv.innerHTML = `
+                    ${message.content}
+                    <div class="timestamp">${new Date(message.timestamp * 1000).toLocaleTimeString()}</div>
+                `;
+                chatBox.appendChild(messageDiv);
+            });
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        document.getElementById('sendMessage').addEventListener('click', async () => {
+            if (messageInput.value.trim() !== '') {
+                const newMessage = {
+                    sender: 'Me',
+                    content: messageInput.value,
+                    timestamp: Math.floor(Date.now() / 1000)
+                };
+                await addDoc(messagesRef, newMessage);
+                messageInput.value = '';
+            }
+        });
+    </script>
 </body>
 </html>
