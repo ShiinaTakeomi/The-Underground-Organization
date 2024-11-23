@@ -32,229 +32,225 @@
         margin-bottom: 20px;
         width: 100%;
     }
+        #chatBox {
+            border: 1px solid #ccc;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        #messageInput {
+            width: calc(100% - 30px);
+            max-width: 350px;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+        }
+        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton, #financialButton {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover, #financialButton:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navigation-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        #biodataBox, #financialBox {
+            border: 1px solid #ccc;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            padding: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .left-side-navigation {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .left-side-navigation button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+    <script type="module">
+        const firebaseConfig = {
+            apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
+            authDomain: "index-d3482.firebaseapp.com",
+            projectId: "index-d3482",
+            storageBucket: "index-d3482.appspot.com",
+            messagingSenderId: "766904853047",
+            appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
+            measurementId: "G-PSTV5VW1ZW"
+        };
 
-    #chatBox {
-        border: 1px solid #ccc;
-        height: 300px;
-        overflow-y: auto;
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 5px;
-        width: 90%;
-        max-width: 400px;
-    }
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
-    #messageInput {
-        width: calc(100% - 30px);
-        max-width: 350px;
-        padding: 10px;
-        margin-right: 10px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-    }
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton, #financialButton {
-        padding: 10px 15px;
-        margin-top: 10px;
-        cursor: pointer;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: white;
-        border: none;
-        border-radius: 5px;
-        transition: background-color 0.3s;
-    }
+        let character = JSON.parse(localStorage.getItem('character')) || {};
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
-    #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover, #financialButton:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        flex-wrap: wrap;
-    }
-
-    .navigation-container {
-        display: flex;
-        justify-content: flex-start;
-        gap: 10px;
-        margin-top: 10px;
-        width: 100%;
-    }
-
-    #biodataBox, #financialBox {
-        border: 1px solid #ccc;
-        background-color: rgba(0, 0, 0, 0.7);
-        border-radius: 5px;
-        width: 90%;
-        max-width: 400px;
-        padding: 10px;
-        margin-top: 20px;
-        display: none;
-    }
-
-    .left-side-navigation {
-        position: fixed;
-        left: 0;
-        top: 0;
-        background-color: rgba(0, 0, 0, 0.7);
-        padding: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-        margin-top: 10px;
-        border-radius: 5px;
-    }
-
-    .left-side-navigation button:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-</style>
-<script type="module">
-    const firebaseConfig = {
-        apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
-        authDomain: "index-d3482.firebaseapp.com",
-        projectId: "index-d3482",
-        storageBucket: "index-d3482.appspot.com",
-        messagingSenderId: "766904853047",
-        appId: "1:766904853047:web:2d651d54a6e7cc3cf095b2",
-        measurementId: "G-PSTV5VW1ZW"
-    };
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, getDocs, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    let character = JSON.parse(localStorage.getItem('character')) || {};
-    const characterName = character.aliasName ? character.aliasName : 'Anonymous';
-
-    async function loadMessages() {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML = 'Loading messages...';
-
-        const messagesRef = collection(db, "messages");
-        const q = query(messagesRef, orderBy("timestamp"));
-
-        onSnapshot(q, (snapshot) => {
+        function renderMessages() {
+            const chatBox = document.getElementById('chatBox');
             chatBox.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const { sender, content } = doc.data();
-                const messageElement = document.createElement('div');
-                messageElement.innerHTML = `<strong>${sender}:</strong> ${content}`;
-                chatBox.appendChild(messageElement);
+            const messagesRef = collection(db, "messages");
+            const q = query(messagesRef, orderBy("timestamp"));
+
+            onSnapshot(q, (querySnapshot) => {
+                chatBox.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    messageElement.innerHTML = `${message.sender}: ${message.content}`;
+                    chatBox.appendChild(messageElement);
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, (error) => {
+                console.error("Error fetching messages: ", error);
+                alert("Failed to load chat messages. Please check your connection.");
             });
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-    }
-
-    async function sendMessage() {
-        const input = document.getElementById('messageInput');
-        const message = input.value.trim();
-
-        if (!message) return alert("Please enter a message!");
-
-        try {
-            await addDoc(collection(db, "messages"), {
-                sender: characterName,
-                content: message,
-                timestamp: Math.floor(Date.now() / 1000),
-            });
-            input.value = '';
-        } catch (error) {
-            console.error("Error sending message: ", error);
-            alert("Failed to send message.");
         }
-    }
 
-    async function clearChat() {
-        if (!confirm("Are you sure you want to clear all messages?")) return;
-
-        const messagesRef = collection(db, "messages");
-        try {
-            const snapshot = await getDocs(messagesRef);
-            for (const doc of snapshot.docs) {
-                await deleteDoc(doc.ref);
-            }
-            alert("Chat cleared successfully.");
-        } catch (error) {
-            console.error("Error clearing chat: ", error);
-            alert("Failed to clear chat.");
-        }
-    }
-
-    window.toggleBiodata = function () {
-        const biodataBox = document.getElementById('biodataBox');
-        biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
-    };
-
-    window.toggleFinancial = async function () {
-        const financialBox = document.getElementById('financialBox');
-        if (financialBox.style.display === 'block') {
-            financialBox.style.display = 'none';
-            return;
-        }
-        try {
-            const docRef = doc(db, "financial", characterName);
-            const docSnap = await getDoc(docRef);
-            if (docSnap.exists()) {
-                const data = docSnap.data();
-                financialBox.innerHTML = `
-                    <h3>Financial Information</h3>
-                    <p><strong>Alias:</strong> ${characterName}</p>
-                    <p><strong>Balance:</strong> $${data.balance}</p>
-                    <p><strong>Income:</strong> $${data.income}</p>
-                    <p><strong>Expenses:</strong> $${data.expenses}</p>
-                `;
+        window.sendMessage = async function() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput.value.trim() !== '') {
+                const newMessage = {
+                    sender: characterName,
+                    content: messageInput.value,
+                    timestamp: Math.floor(Date.now() / 1000)
+                };
+                try {
+                    await addDoc(collection(db, "messages"), newMessage);
+                    messageInput.value = '';
+                } catch (error) {
+                    console.error("Error sending message: ", error);
+                    alert("Failed to send message. Please try again.");
+                }
             } else {
-                financialBox.innerHTML = `
-                    <h3>Financial Information</h3>
-                    <p>No financial data found for ${characterName}.</p>
+                alert("Please enter a message.");
+            }
+        };
+
+        window.clearChat = async function() {
+            if (confirm("Are you sure you want to clear the chat?")) {
+                try {
+                    const messagesRef = collection(db, "messages");
+                    const messagesSnapshot = await getDocs(messagesRef);
+                    messagesSnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref);
+                    });
+                } catch (error) {
+                    console.error("Error clearing chat: ", error);
+                    alert("Failed to clear the chat. Please try again.");
+                }
+            }
+        };
+
+        window.toggleBiodata = function() {
+            const biodataBox = document.getElementById('biodataBox');
+            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.toggleFinancial = async function() {
+            const financialBox = document.getElementById('financialBox');
+            if (financialBox.style.display === 'block') {
+                financialBox.style.display = 'none';
+                return;
+            }
+            try {
+                const docRef = doc(db, "financial", characterName);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p><strong>Alias:</strong> ${characterName}</p>
+                        <p><strong>Balance:</strong> $${data.balance}</p>
+                        <p><strong>Income:</strong> $${data.income}</p>
+                        <p><strong>Expenses:</strong> $${data.expenses}</p>
+                    `;
+                } else {
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p>No financial data found for ${characterName}.</p>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error fetching financial data: ", error);
+                alert("Failed to load financial data. Please try again.");
+            }
+            financialBox.style.display = 'block';
+        };
+
+        window.onload = function() {
+            renderMessages();
+            const biodataBox = document.getElementById('biodataBox');
+            if (character) {
+                biodataBox.innerHTML = `  
+                    <h3>${character.aliasName}</h3>
+                    <p><strong>Age:</strong> ${character.age}</p>
+                    <p><strong>Gender:</strong> ${character.gender}</p>
+                    <p><strong>Height:</strong> ${character.height}</p>
+                    <p><strong>Weight:</strong> ${character.weight}</p>
+                    <p><strong>Body Type:</strong> ${character.bodyType}</p>
+                    <p><strong>Appearance:</strong> ${character.appearance}</p>
+                    <p><strong>Personality:</strong> ${character.personality}</p>
+                    <p><strong>Hobbies:</strong> ${character.hobbies}</p>
                 `;
             }
-        } catch (error) {
-            console.error("Error fetching financial data: ", error);
-            alert("Failed to load financial data.");
-        }
-        financialBox.style.display = 'block';
-    };
-
-    window.onload = function () {
-        loadMessages();
-        const biodataBox = document.getElementById('biodataBox');
-        if (character) {
-            biodataBox.innerHTML = `
-                <h3>${character.aliasName}</h3>
-                <p><strong>Age:</strong> ${character.age}</p>
-                <p><strong>Gender:</strong> ${character.gender}</p>
-                <p><strong>Height:</strong> ${character.height}</p>
-                <p><strong>Weight:</strong> ${character.weight}</p>
-                <p><strong>Body Type:</strong> ${character.bodyType}</p>
-                <p><strong>Appearance:</strong> ${character.appearance}</p>
-                <p><strong>Personality:</strong> ${character.personality}</p>
-                <p><strong>Hobbies:</strong> ${character.hobbies}</p>
-            `;
-        }
-    };
-</script>
-<body>
-    <h1>Welcome to the Underground Organization</h1>
-    <div id="chatBox"></div>
-    <div class="button-container">
-        <input type="text" id="messageInput" placeholder="Type your message here...">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    </div>
-    <div class="left-side-navigation">
-        <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="location.href='index.html'">Abandoned Warehouse</button>
-    </div>
-    <div id="biodataBox"></div>
-</body>
+        };
+    </script>
+    <body>
+        <h1>Welcome to the Underground Organization</h1>
+        <div id="chatBox"></div>
+        <div class="button-container">
+            <input type="text" id="messageInput" placeholder="Type your message here" />
+            <button id="sendMessage" onclick="sendMessage()">Send</button>
+            <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        </div>
+        <div class="navigation-container">
+            <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
+            <button id="abandonedWarehouseButton" onclick="location.href='abandoned-warehouse.html'">Abandoned Warehouse</button>
+            <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
+            <button id="financialButton" onclick="toggleFinancial()">View Financial</button>
+        </div>
+        <div id="biodataBox"></div>
+        <div id="financialBox"></div>
+    </body>
 </html>
