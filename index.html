@@ -1,39 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <style>
+<style>
+    body {
+        background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding-bottom: 20px;
+        overflow-y: auto;
+    }
+
+    /* Responsive adjustments for mobile */
+    @media (max-width: 768px) {
         body {
-            background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
             background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
             background-attachment: scroll;
-            color: white;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding-bottom: 20px;
-            overflow-y: auto;
         }
+    }
 
-        /* Responsive adjustments for mobile */
-        @media (max-width: 768px) {
-            body {
-                background-size: cover;
-                background-attachment: scroll;
-            }
-        }
-
-        h1 {
-            text-align: center;
-            color: white;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-
+    h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+        width: 100%;
+    }
         #chatBox {
             border: 1px solid #ccc;
             height: 300px;
@@ -45,7 +43,6 @@
             width: 90%;
             max-width: 400px;
         }
-
         #messageInput {
             width: calc(100% - 30px);
             max-width: 350px;
@@ -56,7 +53,6 @@
             background-color: rgba(255, 255, 255, 0.8);
             color: black;
         }
-
         #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton, #financialButton {
             padding: 10px 15px;
             margin-top: 10px;
@@ -67,46 +63,15 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
-
         #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover, #financialButton:hover {
             background-color: rgba(255, 255, 255, 0.2);
         }
-
-        #collapsibleMenu {
-            width: 90%;
-            max-width: 400px;
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .menu-header {
-            background-color: rgba(0, 0, 0, 0.8);
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-        }
-
-        .menu-header:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .menu-content {
-            display: none;
-            background-color: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 5px;
-        }
-
         .button-container {
             display: flex;
             justify-content: center;
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .navigation-container {
             display: flex;
             justify-content: flex-start;
@@ -114,7 +79,6 @@
             margin-top: 10px;
             width: 100%;
         }
-
         #biodataBox, #financialBox {
             border: 1px solid #ccc;
             background-color: rgba(0, 0, 0, 0.7);
@@ -125,35 +89,23 @@
             margin-top: 20px;
             display: none;
         }
-
+        .left-side-navigation {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .left-side-navigation button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
     </style>
-</head>
-<body>
-    <h1>Welcome to The Green City</h1>
-    <div id="chatBox"></div>
-    <div class="button-container">
-        <input type="text" id="messageInput" placeholder="Type your message here" />
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
-    </div>
-    <div class="navigation-container">
-        <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
-        <button id="abandonedWarehouseButton" onclick="location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
-        <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
-        <button id="financialButton" onclick="toggleFinancial()">View Financial</button>
-        <button id="factoryButton" onclick="window.location.href='factory1.html'">Factory</button>
-    </div>
-
-    <div id="biodataBox"></div>
-    <div id="financialBox"></div>
-
-    <div id="collapsibleMenu">
-        <div class="menu-header" onclick="toggleMenu()">Additional Info</div>
-        <div class="menu-content">
-            <button onclick="viewMoreDetails()">View More</button>
-        </div>
-    </div>
-
     <script type="module">
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
@@ -247,30 +199,65 @@
                 if (docSnap.exists()) {
                     const data = docSnap.data();
                     financialBox.innerHTML = `
-                        <h3>Financial Details</h3>
-                        <p>Money: RM ${data.money}</p>
-                        <p>Transactions: ${data.transactions}</p>
+                        <h3>Financial Information</h3>
+                        <p><strong>Alias:</strong> ${characterName}</p>
+                        <p><strong>Balance:</strong> $${data.balance}</p>
+                        <p><strong>Income:</strong> $${data.income}</p>
+                        <p><strong>Expenses:</strong> $${data.expenses}</p>
                     `;
-                    financialBox.style.display = 'block';
                 } else {
-                    alert('No financial data found.');
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p>No financial data found for ${characterName}.</p>
+                    `;
                 }
             } catch (error) {
-                console.error("Error loading financial data: ", error);
-                alert("Failed to load financial data.");
+                console.error("Error fetching financial data: ", error);
+                alert("Failed to load financial data. Please try again.");
             }
+            financialBox.style.display = 'block';
         };
 
-        window.toggleMenu = function() {
-            const menuContent = document.querySelector('.menu-content');
-            menuContent.style.display = menuContent.style.display === 'block' ? 'none' : 'block';
-        };
-
-        window.viewMoreDetails = function() {
-            alert('More details would go here.');
-        };
-
-        renderMessages();
+window.onload = function() {
+    renderMessages();
+    const biodataBox = document.getElementById('biodataBox');
+    if (character) {
+        biodataBox.innerHTML = `  
+            <h3>${character.aliasName}</h3>
+            <p><strong>Age:</strong> ${character.age}</p>
+            <p><strong>Gender:</strong> ${character.gender}</p>
+            <p><strong>Height:</strong> ${character.height}</p>
+            <p><strong>Weight:</strong> ${character.weight}</p>
+            <p><strong>Body Type:</strong> ${character.bodyType}</p>
+            <p><strong>Appearance:</strong> ${character.appearance}</p>
+            <p><strong>Personality:</strong> ${character.personality}</p>
+            <p><strong>Hobbies:</strong> ${character.hobbies}</p>
+        `;
+    }
+    // Add the event listener for pressing Enter
+    document.getElementById('messageInput').addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    });
+};
     </script>
-</body>
+    <body>
+        <h1>Welcome to The Green City</h1>
+        <div id="chatBox"></div>
+        <div class="button-container">
+            <input type="text" id="messageInput" placeholder="Type your message here" />
+            <button id="sendMessage" onclick="sendMessage()">Send</button>
+            <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        </div>
+        <div class="navigation-container">
+            <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
+            <button id="abandonedWarehouseButton" onclick="location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+            <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
+            <button id="financialButton" onclick="toggleFinancial()">View Financial</button>
+            <button id="factoryButton" onclick="window.location.href='factory1.html'">Factory</button>
+        </div>
+        <div id="biodataBox"></div>
+        <div id="financialBox"></div>
+    </body>
 </html>
