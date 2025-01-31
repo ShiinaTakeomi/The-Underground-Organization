@@ -1,142 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green City Chat</title>
-    <style>
+<style>
+    body {
+        background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
+        background-size: cover;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-attachment: scroll;
+        color: white;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding-bottom: 20px;
+        overflow-y: auto;
+    }
+
+    /* Responsive adjustments for mobile */
+    @media (max-width: 768px) {
         body {
-            background-image: url('https://i.pinimg.com/736x/f5/73/6e/f5736e5639012c90ba7988fe93a7854b.jpg');
             background-size: cover;
-            background-position: center center;
-            color: white;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            background-attachment: scroll;
         }
+    }
 
-        #chatContainer {
-            width: 100%;
-            max-width: 800px;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
+    h1 {
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+        width: 100%;
+    }
         #chatBox {
-            height: 60vh;
+            border: 1px solid #ccc;
+            height: 300px;
             overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+        }
+        #messageInput {
+            width: calc(100% - 30px);
+            max-width: 350px;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+        }
+        #sendMessage, #clearChat, #biodataButton, #abandonedWarehouseButton, #viewBiodataButton, #financialButton {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        #sendMessage:hover, #clearChat:hover, #biodataButton:hover, #abandonedWarehouseButton:hover, #viewBiodataButton:hover, #financialButton:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navigation-container {
+            display: flex;
+            justify-content: flex-start;
+            gap: 10px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        #biodataBox, #financialBox {
+            border: 1px solid #ccc;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 5px;
+            width: 90%;
+            max-width: 400px;
+            padding: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        .left-side-navigation {
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgba(0, 0, 0, 0.7);
             padding: 10px;
             display: flex;
             flex-direction: column;
-        }
-
-        .message {
-            max-width: 70%;
-            margin: 8px 0;
-            padding: 12px;
-            border-radius: 15px;
-            word-break: break-word;
-            animation: fadeIn 0.3s ease-in;
-        }
-
-        .user-message {
-            background-color: #DCF8C6;
-            color: #000;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-
-        .other-message {
-            background-color: #FFFFFF;
-            color: #000;
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-
-        .timestamp {
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 4px;
-            text-align: right;
-        }
-
-        #inputContainer {
-            display: flex;
+            align-items: flex-start;
             gap: 10px;
-            width: 100%;
-            max-width: 800px;
+            margin-top: 10px;
+            border-radius: 5px;
         }
-
-        #messageInput {
-            flex-grow: 1;
-            padding: 12px;
-            border-radius: 25px;
-            border: none;
-            background-color: rgba(255, 255, 255, 0.9);
-        }
-
-        button {
-            padding: 12px 20px;
-            border-radius: 25px;
-            border: none;
-            background-color: #25D366;
-            color: white;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-
-        button:hover {
-            opacity: 0.9;
-        }
-
-        .navigation-container {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (max-width: 768px) {
-            #chatContainer {
-                padding: 10px;
-            }
-            
-            .message {
-                max-width: 85%;
-            }
+        .left-side-navigation button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
     </style>
-</head>
-<body>
-    <h1>Welcome to The Green City</h1>
-    
-    <div id="chatContainer">
-        <div id="chatBox"></div>
-    </div>
-    
-    <div id="inputContainer">
-        <input type="text" id="messageInput" placeholder="Type a message" />
-        <button onclick="sendMessage()">Send</button>
-    </div>
-
-    <div class="navigation-container">
-        <!-- Your navigation buttons here -->
-    </div>
-
     <script type="module">
-        // Firebase configuration and initialization
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
             authDomain: "index-d3482.firebaseapp.com",
@@ -147,70 +117,175 @@
             measurementId: "G-PSTV5VW1ZW"
         };
 
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { 
+            initializeApp, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            onSnapshot, 
+            query, 
+            orderBy, 
+            getDocs, 
+            deleteDoc, 
+            doc, 
+            getDoc 
+        } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const character = JSON.parse(localStorage.getItem('character')) || {};
-        const characterName = character.aliasName || 'Anonymous';
 
-        // Chat functionality
-        const chatBox = document.getElementById('chatBox');
-        const messageInput = document.getElementById('messageInput');
+        let character = JSON.parse(localStorage.getItem('character')) || {};
+        const characterName = character.aliasName ? character.aliasName : 'Anonymous';
 
-        function createMessageElement(message, isUser) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${isUser ? 'user-message' : 'other-message'}`;
+        function renderMessages() {
+            const chatBox = document.getElementById('chatBox');
+            const messagesRef = collection(db, "messages");
+            
+            // Query with ascending order to show newest at bottom
+            const q = query(messagesRef, orderBy("timestamp", "asc"));
 
-            const contentDiv = document.createElement('div');
-            contentDiv.textContent = message.content;
-
-            const timeDiv = document.createElement('div');
-            timeDiv.className = 'timestamp';
-            timeDiv.textContent = new Date(message.timestamp * 1000).toLocaleTimeString();
-
-            messageDiv.append(contentDiv, timeDiv);
-            return messageDiv;
+            onSnapshot(q, (querySnapshot) => {
+                chatBox.innerHTML = '';
+                querySnapshot.forEach((doc) => {
+                    const message = doc.data();
+                    const messageElement = document.createElement('div');
+                    const timestamp = message.timestamp?.toDate 
+                        ? message.timestamp.toDate().toLocaleString() 
+                        : 'Just now';
+                    
+                    messageElement.innerHTML = `
+                        <div style="margin-bottom: 8px;">
+                            <strong>${message.sender}</strong>
+                            <span style="font-size: 0.8em; color: #ccc;">${timestamp}</span>
+                            <div>${message.content}</div>
+                        </div>
+                    `;
+                    chatBox.appendChild(messageElement);
+                });
+                // Scroll to bottom to show latest message
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, (error) => {
+                console.error("Error fetching messages: ", error);
+                alert("Failed to load chat messages. Please check your connection.");
+            });
         }
 
-        onSnapshot(query(collection(db, "messages"), orderBy("timestamp")), (snapshot) => {
-            chatBox.innerHTML = '';
-            snapshot.forEach(doc => {
-                const message = doc.data();
-                const isUser = message.sender === characterName;
-                chatBox.appendChild(createMessageElement(message, isUser));
-            });
-            chatBox.scrollTo({
-                top: chatBox.scrollHeight,
-                behavior: 'smooth'
-            });
-        });
-
-        window.sendMessage = async () => {
+        window.sendMessage = async function() {
+            const messageInput = document.getElementById('messageInput');
             const content = messageInput.value.trim();
-            if (!content) return;
+            
+            if (!content) {
+                alert("Please enter a message.");
+                return;
+            }
 
             try {
                 await addDoc(collection(db, "messages"), {
                     sender: characterName,
                     content: content,
-                    timestamp: Math.floor(Date.now() / 1000)
+                    timestamp: serverTimestamp() // Use server timestamp instead of local
                 });
                 messageInput.value = '';
             } catch (error) {
-                console.error("Error sending message:", error);
+                console.error("Error sending message: ", error);
                 alert("Failed to send message. Please try again.");
             }
         };
 
-        // Enter key support
-        messageInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+        window.clearChat = async function() {
+            if (confirm("Are you sure you want to clear the chat?")) {
+                try {
+                    const messagesRef = collection(db, "messages");
+                    const messagesSnapshot = await getDocs(messagesRef);
+                    messagesSnapshot.forEach(async (doc) => {
+                        await deleteDoc(doc.ref);
+                    });
+                } catch (error) {
+                    console.error("Error clearing chat: ", error);
+                    alert("Failed to clear the chat. Please try again.");
+                }
             }
-        });
+        };
+
+        window.toggleBiodata = function() {
+            const biodataBox = document.getElementById('biodataBox');
+            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+        };
+
+        window.toggleFinancial = async function() {
+            const financialBox = document.getElementById('financialBox');
+            if (financialBox.style.display === 'block') {
+                financialBox.style.display = 'none';
+                return;
+            }
+            try {
+                const docRef = doc(db, "financial", characterName);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p><strong>Alias:</strong> ${characterName}</p>
+                        <p><strong>Balance:</strong> $${data.balance}</p>
+                        <p><strong>Income:</strong> $${data.income}</p>
+                        <p><strong>Expenses:</strong> $${data.expenses}</p>
+                    `;
+                } else {
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p>No financial data found for ${characterName}.</p>
+                    `;
+                }
+            } catch (error) {
+                console.error("Error fetching financial data: ", error);
+                alert("Failed to load financial data. Please try again.");
+            }
+            financialBox.style.display = 'block';
+        };
+
+        window.onload = function() {
+            renderMessages();
+            const biodataBox = document.getElementById('biodataBox');
+            if (character) {
+                biodataBox.innerHTML = `  
+                    <h3>${character.aliasName}</h3>
+                    <p><strong>Age:</strong> ${character.age}</p>
+                    <p><strong>Gender:</strong> ${character.gender}</p>
+                    <p><strong>Height:</strong> ${character.height}</p>
+                    <p><strong>Weight:</strong> ${character.weight}</p>
+                    <p><strong>Body Type:</strong> ${character.bodyType}</p>
+                    <p><strong>Appearance:</strong> ${character.appearance}</p>
+                    <p><strong>Personality:</strong> ${character.personality}</p>
+                    <p><strong>Hobbies:</strong> ${character.hobbies}</p>
+                `;
+            }
+            // Add the event listener for pressing Enter
+            document.getElementById('messageInput').addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        };
     </script>
-</body>
+    <body>
+        <h1>Welcome to The Green City</h1>
+        <div id="chatBox"></div>
+        <div class="button-container">
+            <input type="text" id="messageInput" placeholder="Type your message here" />
+            <button id="sendMessage" onclick="sendMessage()">Send</button>
+            <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        </div>
+        <div class="navigation-container">
+            <button id="biodataButton" onclick="location.href='biodata.html'">Biodata</button>
+            <button id="abandonedWarehouseButton" onclick="location.href='abandoned_warehouse.html'">Abandoned Warehouse</button>
+            <button id="viewBiodataButton" onclick="toggleBiodata()">View Biodata</button>
+            <button id="financialButton" onclick="toggleFinancial()">View Financial</button>
+            <button id="factoryButton" onclick="window.location.href='factory1.html'">Factory</button>
+        </div>
+        <div id="biodataBox"></div>
+        <div id="financialBox"></div>
+    </body>
 </html>
