@@ -34,8 +34,6 @@
             max-width: 400px;
         }
 
-        .message-text { flex: 1; }
-
         #messageInput {
             width: 90%;
             max-width: 350px;
@@ -72,18 +70,6 @@
             margin-top: 10px;
         }
 
-        #biodataBox, #financialBox {
-            border: 1px solid #ccc;
-            background-color: rgba(0, 0, 0, 0.7);
-            border-radius: 5px;
-            width: 90%;
-            max-width: 400px;
-            padding: 10px;
-            margin-top: 20px;
-            display: none;
-            color: white;
-        }
-
         @media (max-width: 768px) {
             #messageInput { width: 100%; }
             .button-container, .navigation-container { flex-direction: column; align-items: center; }
@@ -95,8 +81,8 @@
     <div id="chatBox"></div>
     <div class="button-container">
         <input type="text" id="messageInput" placeholder="Type your message here">
-        <button id="sendMessage" onclick="sendMessage()">Send</button>
-        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
+        <button id="sendMessage">Send</button>
+        <button id="clearChat">Clear Chat</button>
     </div>
 
     <div class="navigation-container">
@@ -107,12 +93,9 @@
         <button id="factoryButton" onclick="window.location.href='factory1.html'">Factory</button>
     </div>
 
-    <div id="biodataBox"></div>
-    <div id="financialBox"></div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
@@ -152,7 +135,10 @@
         async function sendMessage() {
             const messageInput = document.getElementById('messageInput');
             const messageText = messageInput.value.trim();
-            if (messageText === '') return alert("Please enter a message.");
+            if (messageText === '') {
+                alert("Please enter a message.");
+                return;
+            }
 
             try {
                 await addDoc(collection(db, "messages"), {
@@ -173,14 +159,22 @@
             try {
                 const messagesRef = collection(db, "messages");
                 const querySnapshot = await getDocs(messagesRef);
-                const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
-                await Promise.all(deletePromises);
+                const batch = writeBatch(db);
+
+                querySnapshot.forEach((doc) => {
+                    batch.delete(doc.ref);
+                });
+
+                await batch.commit();
                 alert("Chat cleared successfully.");
             } catch (error) {
                 console.error("Error clearing chat:", error);
                 alert("Failed to clear chat.");
             }
         }
+
+        document.getElementById('sendMessage').addEventListener('click', sendMessage);
+        document.getElementById('clearChat').addEventListener('click', clearChat);
 
         document.getElementById('messageInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
