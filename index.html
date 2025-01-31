@@ -34,9 +34,7 @@
             max-width: 400px;
         }
 
-        .message { display: flex; justify-content: space-between; align-items: center; }
         .message-text { flex: 1; }
-        .message-buttons { display: flex; gap: 5px; }
 
         #messageInput {
             width: 90%;
@@ -83,6 +81,7 @@
             padding: 10px;
             margin-top: 20px;
             display: none;
+            color: white;
         }
 
         @media (max-width: 768px) {
@@ -113,7 +112,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, updateDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, getDocs, deleteDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.1.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDTqTyn4C4_rkMhkN7LBS6CxNtghgghfVM",
@@ -142,19 +141,8 @@
                 chatBox.innerHTML = '';
                 querySnapshot.forEach((doc) => {
                     const message = doc.data();
-                    const messageId = doc.id;
-
                     const messageElement = document.createElement('div');
-                    messageElement.classList.add('message');
-                    messageElement.innerHTML = `
-                        <span class="message-text"><strong>${message.sender}</strong>: ${message.content}</span>
-                        <div class="message-buttons">
-                            ${message.sender === characterName ? `
-                                <button onclick="editMessage('${messageId}', '${message.content}')">Edit</button>
-                                <button onclick="deleteMessage('${messageId}')">Delete</button>
-                            ` : ''}
-                        </div>
-                    `;
+                    messageElement.innerHTML = `<strong>${message.sender}</strong>: ${message.content}`;
                     chatBox.appendChild(messageElement);
                 });
                 chatBox.scrollTop = chatBox.scrollHeight;
@@ -183,27 +171,51 @@
             querySnapshot.forEach(async (doc) => await deleteDoc(doc.ref));
         }
 
-        async function editMessage(messageId, oldText) {
-            const newText = prompt("Edit your message:", oldText);
-            if (!newText) return;
-
-            await updateDoc(doc(db, "messages", messageId), { content: newText });
-        }
-
-        async function deleteMessage(messageId) {
-            if (!confirm("Are you sure you want to delete this message?")) return;
-
-            await deleteDoc(doc(db, "messages", messageId));
-        }
-
         window.toggleBiodata = function() {
             const biodataBox = document.getElementById('biodataBox');
-            biodataBox.style.display = biodataBox.style.display === 'block' ? 'none' : 'block';
+            if (biodataBox.style.display === 'block') {
+                biodataBox.style.display = 'none';
+                return;
+            }
+            biodataBox.innerHTML = `
+                <h3>${character.aliasName}</h3>
+                <p><strong>Age:</strong> ${character.age}</p>
+                <p><strong>Gender:</strong> ${character.gender}</p>
+                <p><strong>Height:</strong> ${character.height}</p>
+                <p><strong>Weight:</strong> ${character.weight}</p>
+                <p><strong>Body Type:</strong> ${character.bodyType}</p>
+                <p><strong>Appearance:</strong> ${character.appearance}</p>
+                <p><strong>Personality:</strong> ${character.personality}</p>
+                <p><strong>Hobbies:</strong> ${character.hobbies}</p>
+            `;
+            biodataBox.style.display = 'block';
         };
 
         window.toggleFinancial = async function() {
             const financialBox = document.getElementById('financialBox');
-            financialBox.style.display = financialBox.style.display === 'block' ? 'none' : 'block';
+            if (financialBox.style.display === 'block') {
+                financialBox.style.display = 'none';
+                return;
+            }
+            try {
+                const docRef = doc(db, "financial", characterName);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    financialBox.innerHTML = `
+                        <h3>Financial Information</h3>
+                        <p><strong>Alias:</strong> ${characterName}</p>
+                        <p><strong>Balance:</strong> $${data.balance}</p>
+                        <p><strong>Income:</strong> $${data.income}</p>
+                        <p><strong>Expenses:</strong> $${data.expenses}</p>
+                    `;
+                } else {
+                    financialBox.innerHTML = `<h3>Financial Information</h3><p>No financial data found.</p>`;
+                }
+            } catch (error) {
+                alert("Failed to load financial data.");
+            }
+            financialBox.style.display = 'block';
         };
 
         document.getElementById('messageInput').addEventListener('keypress', function(event) {
