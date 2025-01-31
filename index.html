@@ -95,8 +95,8 @@
     <div id="chatBox"></div>
     <div class="button-container">
         <input type="text" id="messageInput" placeholder="Type your message here">
-        <button onclick="sendMessage()">Send</button>
-        <button onclick="clearChat()">Clear Chat</button>
+        <button id="sendMessage" onclick="sendMessage()">Send</button>
+        <button id="clearChat" onclick="clearChat()">Clear Chat</button>
     </div>
 
     <div class="navigation-container">
@@ -154,69 +154,33 @@
             const messageText = messageInput.value.trim();
             if (messageText === '') return alert("Please enter a message.");
 
-            await addDoc(collection(db, "messages"), {
-                sender: characterName,
-                content: messageText,
-                timestamp: serverTimestamp()
-            });
-
-            messageInput.value = '';
+            try {
+                await addDoc(collection(db, "messages"), {
+                    sender: characterName,
+                    content: messageText,
+                    timestamp: serverTimestamp()
+                });
+                messageInput.value = ''; // Clear input field after sending
+            } catch (error) {
+                console.error("Error sending message:", error);
+                alert("Failed to send message.");
+            }
         }
 
         async function clearChat() {
             if (!confirm("Are you sure you want to clear the chat?")) return;
 
-            const messagesRef = collection(db, "messages");
-            const querySnapshot = await getDocs(messagesRef);
-            querySnapshot.forEach(async (doc) => await deleteDoc(doc.ref));
-        }
-
-        window.toggleBiodata = function() {
-            const biodataBox = document.getElementById('biodataBox');
-            if (biodataBox.style.display === 'block') {
-                biodataBox.style.display = 'none';
-                return;
-            }
-            biodataBox.innerHTML = `
-                <h3>${character.aliasName}</h3>
-                <p><strong>Age:</strong> ${character.age}</p>
-                <p><strong>Gender:</strong> ${character.gender}</p>
-                <p><strong>Height:</strong> ${character.height}</p>
-                <p><strong>Weight:</strong> ${character.weight}</p>
-                <p><strong>Body Type:</strong> ${character.bodyType}</p>
-                <p><strong>Appearance:</strong> ${character.appearance}</p>
-                <p><strong>Personality:</strong> ${character.personality}</p>
-                <p><strong>Hobbies:</strong> ${character.hobbies}</p>
-            `;
-            biodataBox.style.display = 'block';
-        };
-
-        window.toggleFinancial = async function() {
-            const financialBox = document.getElementById('financialBox');
-            if (financialBox.style.display === 'block') {
-                financialBox.style.display = 'none';
-                return;
-            }
             try {
-                const docRef = doc(db, "financial", characterName);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    financialBox.innerHTML = `
-                        <h3>Financial Information</h3>
-                        <p><strong>Alias:</strong> ${characterName}</p>
-                        <p><strong>Balance:</strong> $${data.balance}</p>
-                        <p><strong>Income:</strong> $${data.income}</p>
-                        <p><strong>Expenses:</strong> $${data.expenses}</p>
-                    `;
-                } else {
-                    financialBox.innerHTML = `<h3>Financial Information</h3><p>No financial data found.</p>`;
-                }
+                const messagesRef = collection(db, "messages");
+                const querySnapshot = await getDocs(messagesRef);
+                const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
+                await Promise.all(deletePromises);
+                alert("Chat cleared successfully.");
             } catch (error) {
-                alert("Failed to load financial data.");
+                console.error("Error clearing chat:", error);
+                alert("Failed to clear chat.");
             }
-            financialBox.style.display = 'block';
-        };
+        }
 
         document.getElementById('messageInput').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
